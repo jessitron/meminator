@@ -3,11 +3,8 @@
 # this will only work if you are me, and have your aws login set up etc.
 
 source .env
-export DOCKER_DEFAULT_PLATFORM=linux/amd64 # too bad this doesn't do anything :cry:
-
 export WORKSHOP_VERSION=byo-sre
 
-docker compose build
+docker compose build --push
 
-docker compose push
-
+# because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES

@@ -1,22 +1,14 @@
 
-# O11yDay Meminator
+# Meminator
 
-This contains a sample application for use in the Observability Day workshops.
+Because a meme doesn't have to make _sense_ to be funny.
 
-See it in action: [o11yday.jessitron.honeydemo.io](http://o11yday.jessitron.honeydemo.io)
+See it in action: [o11yday.jessitron.honeydemo.io](https://o11yday.jessitron.honeydemo.io)
 
-It generates images by combining a randomly chosen picture with a randomly chosen phrase.
+## Be Your Own SRE: Observability for Developers
 
-## Workshop Agenda
-
-1. Hello! Welcome to Advanced Instrumentation with OpenTelemetry. A few [slides](https://docs.google.com/presentation/d/1jNJCuns5wrL9sOJfT8yAaQ5HR5bc_e1d6i88oGspe2k/edit?usp=sharing)
-2. Look at this app. It has default instrumentation.
-3. Run this app. 
-4. Connect this app to Honeycomb.
-5. See what the traces look like.
-6. Improve the traces.
-
-Also, while you're here, maybe subscribe to our OpenTelemetry practitioner newsletter? [https://opentelemetryinpractice.net/](https://opentelemetryinpractice.net/)
+This version of the app is for a talk at KCDC 2024. If you want a version of this app in more languages (Java, Python, Go, .NET),
+then pop over to Honeycomb's [Observability Day Workshops repo](https://github.com/honeycombio/observability-day-workshop).
 
 ## Running the application
 

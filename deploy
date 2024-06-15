@@ -3,8 +3,10 @@
 # this will only work if you are me, and have your aws login set up etc.
 
 source .env
-export WORKSHOP_VERSION=byo-sre
+export WORKSHOP_VERSION=byo-sre-2
 
-docker compose build --push
+docker compose build --push $*
+
+cat k8s/k8s.yaml | sed 's/WORKSHOP_VERSION/'$WORKSHOP_VERSION'/g' | kubectl apply -f -
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES

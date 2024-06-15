@@ -10,13 +10,13 @@ First, push the images to dockerhub
 
 Put the multiplatform stuff in: `git cherry-pick multiplatform` (revert it later)
 
-`WORKSHOP_VERSION=prod docker compose build --push`
+`WORKSHOP_VERSION=byo-sre docker compose build --push`
 
-I might have to change the version to prod-2 or something. Or maybe it's enough to delete the pods... they're supposed to pull every time but it can't be counted on.
+I might have to increment the version every time to get it to really update the pods, hmm.
 
 So change the version in k8s.yaml... 
 
-Then, apply the k8s.yaml file
+Then, apply the k8s.yaml file   
 
 `k apply -f k8s.yaml`
 

@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: backend-for-frontend
-          image: o11yday/backend-for-frontend-nodejs:prod
+          image: o11yday/backend-for-frontend-nodejs:WORKSHOP_VERSION
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -79,7 +79,7 @@ spec:
     spec:
       containers:
         - name: meminator
-          image: o11yday/meminator-nodejs:prod
+          image: o11yday/meminator-nodejs:WORKSHOP_VERSION
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -128,7 +128,7 @@ spec:
     spec:
       containers:
         - name: phrase-picker
-          image: o11yday/phrase-picker-nodejs:prod
+          image: o11yday/phrase-picker-nodejs:WORKSHOP_VERSION
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -177,7 +177,7 @@ spec:
     spec:
       containers:
         - name: image-picker
-          image: o11yday/image-picker-nodejs:prod
+          image: o11yday/image-picker-nodejs:WORKSHOP_VERSION
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -226,7 +226,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: o11yday/web:prod
+          image: o11yday/web:WORKSHOP_VERSION
           imagePullPolicy: Always
           ports:
             - containerPort: 80

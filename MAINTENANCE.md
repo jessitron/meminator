@@ -4,7 +4,7 @@
 
 To get new versions of the containers on Dockerhub for caching, log in appropriately.
 
-Make sure the `--platform` option is present in the docker-compose (we remove it for faster development)
+Make sure the `platforms:` option is present in the docker-compose (we remove it for faster development)
 
 set PROGRAMMING_LANGUAGE to what you need.
 

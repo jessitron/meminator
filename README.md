@@ -7,8 +7,9 @@ See it in action: [o11yday.jessitron.honeydemo.io](https://o11yday.jessitron.hon
 
 ## Be Your Own SRE: Observability for Developers
 
-This version of the app is for a talk at KCDC 2024. If you want a version of this app in more languages (Java, Python, Go, .NET),
+This version of the app is for a talk at KCDC 2024. If you want a version of this app in more languages (Python, Go, .NET),
 then pop over to Honeycomb's [Observability Day Workshops repo](https://github.com/honeycombio/observability-day-workshop).
+There's also a [Java version](https://github.com/honeycombio/academy-instrumentation-java).
 
 ## Running the application
 

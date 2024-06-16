@@ -25,7 +25,8 @@ function sed_in_place {
   sed "$expr" $file > $file.bak
   if [ $? -eq 0 ]; then
     mv $file.bak $file
-    chmod u+x $file # custom for this program; duplicating perms would be better
+    # chmod u+x $file # duplicating perms would be better
+    chmod `stat -f %A $file` $file.bak # this works on mac
   else
     echo "replacement didn't work on $file"
     break

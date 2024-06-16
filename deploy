@@ -26,13 +26,12 @@ function sed_in_place {
   if [ $? -eq 0 ]; then
     chmod `stat -f %A $file` $file.bak # this works on mac
     mv $file.bak $file
-    # chmod u+x $file # duplicating perms would be better
   else
     echo "replacement didn't work on $file"
     break
   fi
 }
 
-echo "I am $me with VERSION_NUMBER $VERSION_NUMBER"
+echo "Deploying from $me with VERSION_NUMBER $VERSION_NUMBER"
 
 sed_in_place "s/VERSION_NUMBER=$VERSION_NUMBER/VERSION_NUMBER=$(( VERSION_NUMBER + 1 ))/" $me

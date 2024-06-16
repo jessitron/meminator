@@ -8,7 +8,7 @@ set -x
 me=$0
 
 source .env
-VERSION_NUMBER=5
+VERSION_NUMBER=7
 export IMAGE_TAG=byo-sre-$VERSION_NUMBER
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES
@@ -24,9 +24,9 @@ function sed_in_place {
   backup=$file.bak
   sed "$expr" $file > $file.bak
   if [ $? -eq 0 ]; then
+    chmod `stat -f %A $file` $file.bak # this works on mac
     mv $file.bak $file
     # chmod u+x $file # duplicating perms would be better
-    chmod `stat -f %A $file` $file.bak # this works on mac
   else
     echo "replacement didn't work on $file"
     break

@@ -10,7 +10,7 @@ First, push the images to dockerhub
 
 Put the multiplatform stuff in: `git cherry-pick multiplatform` (revert it later)
 
-`WORKSHOP_VERSION=byo-sre docker compose build --push`
+`IMAGE_TAG=byo-sre docker compose build --push`
 
 I might have to increment the version every time to get it to really update the pods, hmm.
 

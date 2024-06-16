@@ -3,10 +3,12 @@
 # this will only work if you are me, and have your aws login set up etc.
 
 source .env
-export WORKSHOP_VERSION=byo-sre-2
-
-docker compose build --push $*
-
-cat k8s/k8s.yaml | sed 's/WORKSHOP_VERSION/'$WORKSHOP_VERSION'/g' | kubectl apply -f -
+VERSION_NUMBER=4
+export IMAGE_TAG=byo-sre-$VERSION_NUMBER
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES
+docker compose build --push $*
+
+# Now do the kubernetes deloy
+cat k8s/k8s.yaml | sed 's/IMAGE_TAG/'$IMAGE_TAG'/g' | kubectl apply -f -
+

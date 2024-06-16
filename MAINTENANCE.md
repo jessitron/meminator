@@ -16,7 +16,7 @@ push tag that is used for cache-from:
 
 ```bash
 source .env
-WORKSHOP_VERSION=${IMAGE_VERSION} docker compose build --push
+IMAGE_TAG=${IMAGE_VERSION} docker compose build --push
 ```
 
 ... for each $PROGRAMMING_LANGUAGE implemented. (currently nodejs and python)

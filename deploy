@@ -2,6 +2,11 @@
 
 # this will only work if you are me, and have your aws login set up etc.
 
+set -e
+set -x
+
+me=$0
+
 source .env
 VERSION_NUMBER=4
 export IMAGE_TAG=byo-sre-$VERSION_NUMBER
@@ -12,3 +17,21 @@ docker compose build --push $*
 # Now do the kubernetes deloy
 cat k8s/k8s.yaml | sed 's/IMAGE_TAG/'$IMAGE_TAG'/g' | kubectl apply -f -
 
+## Now change this script to increment the version number, so next time it will be different.
+function sed_in_place {
+  expr=$1
+  file=$2
+  backup=$file.bak
+  sed "$expr" $file > $file.bak
+  if [ $? -eq 0 ]; then
+    mv $file.bak $file
+    chmod u+x $file # custom for this program; duplicating perms would be better
+  else
+    echo "replacement didn't work on $file"
+    break
+  fi
+}
+
+echo "I am $me with VERSION_NUMBER $VERSION_NUMBER"
+
+sed_in_place "s/VERSION_NUMBER=$VERSION_NUMBER/VERSION_NUMBER=$(( VERSION_NUMBER + 1 ))/" $me

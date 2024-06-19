@@ -90,13 +90,13 @@ services:
     restart: unless-stopped
     volumes:
       - opensearch-data:/usr/share/opensearch/data
+      - ./services/opensearch/opensearch.yml:/usr/share/opensearch/config/opensearch.yml
     environment:
-      - cluster.name=demo-cluster # this is an opensearch cluster
       - node.name=demo-node
       - bootstrap.memory_lock=true
       - discovery.type=single-node
       - OPENSEARCH_JAVA_OPTS=-Xms300m -Xmx300m
-      - DISABLE_INSTALL_DEMO_CONFIG=tru
+      - DISABLE_INSTALL_DEMO_CONFIG=true
       - OPENSEARCH_INITIAL_ADMIN_PASSWORD=kcdc2024-A
     ulimits:
       memlock:

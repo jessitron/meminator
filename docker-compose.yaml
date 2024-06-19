@@ -80,7 +80,7 @@ services:
       - HONEYCOMB_API_KEY
 
   # copied from OpenTelemetry Demo
-  opensearch:
+  opensearch-node:
     image: opensearchproject/opensearch:2.14.0
     container_name: opensearch
     deploy:
@@ -88,6 +88,8 @@ services:
         limits:
           memory: 1G
     restart: unless-stopped
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
     environment:
       - cluster.name=demo-cluster
       - node.name=demo-node
@@ -96,6 +98,7 @@ services:
       - OPENSEARCH_JAVA_OPTS=-Xms300m -Xmx300m
       - DISABLE_INSTALL_DEMO_CONFIG=true
       - DISABLE_SECURITY_PLUGIN=true
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=admin2
     ulimits:
       memlock:
         soft: -1
@@ -104,5 +107,17 @@ services:
         soft: 65536
         hard: 65536
     ports:
-      - "9200"
-      - "5601"
+      - "9200:9200"
+      - "9600:9600"
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.14.0 # Make sure the version of opensearch-dashboards matches the version of opensearch installed on other nodes
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601 # Map host port 5601 to container port 5601
+    expose:
+      - "5601" # Expose port 5601 for web access to OpenSearch Dashboards
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node:9200"]' # Define the OpenSearch nodes that OpenSearch Dashboards will query
+
+volumes:
+  opensearch-data:

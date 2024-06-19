@@ -64,14 +64,3 @@ logger.emit({
     body: 'this is a log record body',
     attributes: { 'stuff': 'and things' },
 });
-
-
-import { PinoInstrumentation } from '@opentelemetry/instrumentation-pino';
-import { registerInstrumentations } from '@opentelemetry/instrumentation';
-
-registerInstrumentations({
-    instrumentations: [
-        new PinoInstrumentation({
-        }),
-    ],
-});

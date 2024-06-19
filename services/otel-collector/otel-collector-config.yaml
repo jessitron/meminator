@@ -30,8 +30,17 @@ exporters:
     headers:
       x-honeycomb-team: ${HONEYCOMB_API_KEY}
       x-honeycomb-dataset: "not-traces"
+  opensearch:
+        http:
+          endpoint: http://otel-demo-opensearch:9200
+          tls:
+            insecure: true
+        logs_index: otel
 
 service:
+  telemetry:
+    logs:
+      level: "debug"
   pipelines:
     traces:
       receivers: [otlp]
@@ -44,4 +53,4 @@ service:
     logs:
       receivers: [otlp]
       processors: [memory_limiter, attributes/attribution, batch]
-      exporters: [otlp]
+      exporters: [otlp, opensearch]

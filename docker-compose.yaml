@@ -12,6 +12,7 @@ services:
       - "10115:10114" # Expose the port your Express app is listening on
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http
       - OTEL_SERVICE_NAME=backend-for-frontend-nodejs
 
   meminator:

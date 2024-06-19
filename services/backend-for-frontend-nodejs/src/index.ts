@@ -1,11 +1,17 @@
 import "./tracing"
 import express, { Request, Response } from 'express';
 import { fetchFromService } from "./o11yday-lib";
+import pino from "pino";
 
 import loginate from "pino-http";
 
 const app = express();
-app.use(loginate())
+const transport = pino.transport({
+    target: 'pino-opentelemetry-transport'
+});
+
+const logging = loginate(transport);
+app.use(logging);
 const PORT = 10114;
 app.use(express.json());
 

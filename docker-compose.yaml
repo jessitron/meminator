@@ -11,8 +11,6 @@ services:
     ports:
       - "10115:10114" # Expose the port your Express app is listening on
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_EXPORTER_OTLP_HEADERS
       - OTEL_SERVICE_NAME=backend-for-frontend-nodejs
 
   meminator:
@@ -26,8 +24,6 @@ services:
     ports:
       - "10116:10114" # they can't be the same
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_EXPORTER_OTLP_HEADERS
       - OTEL_SERVICE_NAME=meminator-nodejs
 
   phrase-picker:
@@ -41,8 +37,6 @@ services:
     ports:
       - "10117:10114" # the outer ports can't be the same
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_EXPORTER_OTLP_HEADERS
       - OTEL_SERVICE_NAME=phrase-picker-nodejs
 
   image-picker:
@@ -57,8 +51,6 @@ services:
       - "10118:10114" # the outer ports can't be the same
     environment:
       - BUCKET_NAME
-      - OTEL_EXPORTER_OTLP_ENDPOINT
-      - OTEL_EXPORTER_OTLP_HEADERS
       - OTEL_SERVICE_NAME=image-picker-nodejs
 
   web:

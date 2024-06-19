@@ -16,7 +16,7 @@ processors:
     actions:
       - key: "collector.name"
         action: insert
-        value: "friendly-collector"
+        value: "friendly-local-collector"
   memory_limiter:
     check_interval: 1s
     limit_percentage: 50
@@ -29,7 +29,7 @@ exporters:
     endpoint: "api.honeycomb.io:443"
     headers:
       x-honeycomb-team: ${HONEYCOMB_API_KEY}
-      x-honeycomb-dataset: "metrics"
+      x-honeycomb-dataset: "not-traces"
 
 service:
   pipelines:

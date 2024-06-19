@@ -79,7 +79,7 @@ services:
     environment:
       - HONEYCOMB_API_KEY
 
-# copied from OpenTelemetry Demo
+  # copied from OpenTelemetry Demo
   opensearch:
     image: opensearchproject/opensearch:2.14.0
     container_name: opensearch
@@ -105,3 +105,4 @@ services:
         hard: 65536
     ports:
       - "9200"
+      - "5601"

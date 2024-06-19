@@ -1,17 +1,29 @@
 import "./tracing"
 import express, { Request, Response } from 'express';
 import { fetchFromService } from "./o11yday-lib";
-import pino from "pino";
 
-import loginate from "pino-http";
+import winston from 'winston';
+import winstonExpress from 'express-winston';
 
-const app = express();
-const transport = pino.transport({
-    target: 'pino-opentelemetry-transport'
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        }),
+    ],
 });
 
-const logging = loginate(transport);
-app.use(logging);
+
+const app = express();
+app.use(winstonExpress.logger({
+    winstonInstance: logger,
+    msg: "HTTP {{req.method}} {{req.url}}",
+    expressFormat: true,
+    colorize: false,
+    ignoreRoute: function (req, res) { return false; }
+}));
 const PORT = 10114;
 app.use(express.json());
 
@@ -29,7 +41,7 @@ app.post('/createPicture', async (req: Request, res: Response) => {
         const phraseText = phraseResponse.ok ? await phraseResponse.text() : "{}";
         const imageText = imageResponse.ok ? await imageResponse.text() : "{}";
         //    span?.setAttributes({ "app.phraseResponse": phraseText, "app.imageResponse": imageText }); // INSTRUMENTATION: add relevant info to span
-        req.log.info({ phraseResponse: phraseText, imageResponse: imageText }, "Received responses from services");
+        logger.log('info', "Received responses from services", { phraseResponse: phraseText, imageResponse: imageText });
         const phraseResult = JSON.parse(phraseText);
         const imageResult = JSON.parse(imageText);
 

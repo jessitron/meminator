@@ -26,7 +26,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,
         '-gravity', 'North',
-        '-pointsize', '${pointsize}',
+        '-pointsize', `${pointsize}`,
         '-fill', 'white',
         '-undercolor', '#00000080',
         '-font', font,

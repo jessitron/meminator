@@ -21,37 +21,56 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
+    const pointsize = 48;
+    const font = 'Angkor-Regular';
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,
         '-gravity', 'North',
-        '-pointsize', '48',
+        '-pointsize', '${pointsize}',
         '-fill', 'white',
         '-undercolor', '#00000080',
-        '-font', 'Angkor-Regular',
+        '-font', font,
         '-annotate', '0', `${phrase}`,
         outputImagePath];
 
-    measureTextWidth(48, 'Angkor-Regular', phrase);
 
     const processResult = await spawnProcess('convert', args);
 
-    spawnProcess('identify', ['-format', '%w', outputImagePath]).then((result) => {
-        logger.log('debug', `Identify on output file: ${result.stdout}`, { "identify.filepath": outputImagePath, "identify.width": result.stdout, "identify.error": result.stderr })
-    });
+    // don't wait for this
+    checkWhetherTextFits(pointsize, font, phrase, outputImagePath);
 
     return outputImagePath
 }
 
-async function measureTextWidth(pointsize: number, font: string, text: string): Promise<number> {
+async function checkWhetherTextFits(pointsize: number, font: string, text: string, imageFilename: string) {
     return inSpanAsync('measure text width', { attributes: { "text.pointsize": pointsize, "text.font": font, "text.content": text, "text.length": text.length } }, async (span) => {
-        const result = await spawnProcess('convert', ['-pointsize', `${pointsize}`, '-font', `${font}`, '-format', '%w', `caption:${text}`, 'info:'])
-        // convert stdout to int
-        const width = parseInt(result.stdout);
-        if (Number.isNaN(width)) {
-            throw new Error(`Could not parse width from ImageMagick output: ${result.stdout}`);
-        }
-        span.setAttribute('text.width', width);
-        span.end();
-        return width;
+        return Promise.all([measureTextWidth(48, 'Angkor-Regular', text), measureImageWidth(imageFilename)]).then(([textWidth, imageWidth]) => {
+            if (textWidth > imageWidth) {
+                logger.log('warn', `Text width is greater than image width: ${textWidth} > ${imageWidth}`, { "text.width": textWidth, "image.width": imageWidth, "text.content": text });
+            }
+            span.setAttributes({ 'text.width': textWidth, "image.width": imageWidth, "text.doesItFit": textWidth <= imageWidth });
+        });
     });
+}
+
+async function measureTextWidth(pointsize: number, font: string, text: string): Promise<number> {
+    const result = await spawnProcess('convert', ['-pointsize', `${pointsize}`, '-font', `${font}`, '-format', '%w', `caption:${text}`, 'info:'])
+    // convert stdout to int
+    const width = parseInt(result.stdout);
+    if (Number.isNaN(width)) {
+        throw new Error(`Could not parse width from ImageMagick output: ${result.stdout}`);
+    }
+    return width;
+}
+
+async function measureImageWidth(filepath: string) {
+    const result = await spawnProcess('identify', ['-format', '%w', filepath]).then((result) => {
+        logger.log('debug', `Identify on output file: ${result.stdout}`, { "identify.filepath": filepath, "identify.width": result.stdout, "identify.error": result.stderr })
+        return result
+    })
+    const width = parseInt(result.stdout);
+    if (Number.isNaN(width)) {
+        throw new Error(`Could not parse width from ImageMagick output: ${result.stdout}`);
+    }
+    return width;
 }

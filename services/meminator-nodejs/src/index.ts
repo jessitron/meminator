@@ -41,18 +41,10 @@ app.post('/applyPhraseToPicture', async (req, res) => {
         const inputImagePath = await download(imageUrl);
 
         await trace.getTracer('meminator').startActiveSpan('apply text', async (newSpan) => { // INSTRUMENTATION 2: a span that will have children
-            if (new FeatureFlags().useLibrary()) {
-                logger.log('info', "Using the new library to apply text to image");
-                // try out this new way. Is it faster?
-                const outputBuffer = await applyTextWithLibrary(inputImagePath, phrase);
-                res.writeHead(200, { 'Content-Type': 'image/png' });
-                res.end(outputBuffer);
-            } else {
-                logger.log('info', "Using the old way to apply text to image");
-                // the same old way
-                const outputImagePath = await applyTextWithImagemagick(phrase, inputImagePath);
-                res.sendFile(outputImagePath);
-            }
+            logger.log('info', "Using ImageMagick to apply text to image");
+            // the same old way
+            const outputImagePath = await applyTextWithImagemagick(phrase, inputImagePath);
+            res.sendFile(outputImagePath);
             newSpan.end(); // INSTRUMENTATION: you don't get telemetry for creating spans. You get it for ending spans
         }); // INSTRUMENTATION 2: end the callback
     }

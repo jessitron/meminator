@@ -6,18 +6,8 @@ import { applyTextWithImagemagick } from "./applyTextWithImagemagick";
 import { applyTextWithLibrary } from "./applyTextWithLibrary";
 import { FeatureFlags } from "./featureFlags";
 import path from 'path';
-import winston from 'winston';
+import { logger } from './log-with-winston';
 import winstonExpress from 'express-winston';
-
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    transports: [
-        new winston.transports.Console({
-            format: winston.format.simple(),
-        }),
-    ],
-});
 
 const app = express();
 app.use(winstonExpress.logger({

@@ -44,12 +44,12 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
 
 async function checkWhetherTextFits(pointsize: number, font: string, text: string, imageFilename: string) {
     return inSpanAsync('measure text width', { attributes: { "text.pointsize": pointsize, "text.font": font, "text.content": text, "text.length": text.length } }, async (span) => {
-        return Promise.all([measureTextWidth(48, 'Angkor-Regular', text), measureImageWidth(imageFilename)]).then(([textWidth, imageWidth]) => {
-            if (textWidth > imageWidth) {
-                logger.log('warn', `Text width is greater than image width: ${textWidth} > ${imageWidth}`, { "text.width": textWidth, "image.width": imageWidth, "text.content": text });
-            }
-            span.setAttributes({ 'text.width': textWidth, "image.width": imageWidth, "text.doesItFit": textWidth <= imageWidth });
-        });
+        const textWidth = await measureTextWidth(pointsize, font, text);
+        const imageWidth = await measureImageWidth(imageFilename);
+        if (textWidth > imageWidth) {
+            logger.log('warn', `Text width is greater than image width: ${textWidth} > ${imageWidth}`, { "text.width": textWidth, "image.width": imageWidth, "text.content": text });
+        }
+        span.setAttributes({ 'text.width': textWidth, "image.width": imageWidth, "text.doesItFit": textWidth <= imageWidth });
     });
 }
 

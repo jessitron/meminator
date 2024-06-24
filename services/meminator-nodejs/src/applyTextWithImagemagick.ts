@@ -35,7 +35,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
 
     const processResult = await spawnProcess('convert', args);
 
-    await spawnProcess('identify', ['-format', '%w', outputImagePath]).then((result) => {
+    spawnProcess('identify', ['-format', '%w', outputImagePath]).then((result) => {
         logger.log('debug', `Identify on output file: ${result.stdout}`, { "identify.filepath": outputImagePath, "identify.width": result.stdout, "identify.error": result.stderr })
     });
 

@@ -31,7 +31,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         '-annotate', '0', `${phrase}`,
         outputImagePath];
 
-    await measureTextWidth(48, 'Angkor-Regular', phrase);
+    measureTextWidth(48, 'Angkor-Regular', phrase);
 
     const processResult = await spawnProcess('convert', args);
 

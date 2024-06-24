@@ -6,16 +6,27 @@ set -e
 set -x
 
 me=$0
+deploy_only=$1
 
 source .env
-VERSION_NUMBER=9
+VERSION_NUMBER=11
 export IMAGE_TAG=byo-sre-$VERSION_NUMBER
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES
-docker compose build --push $*
+docker compose build --push $deploy_only
 
 # Now do the kubernetes deloy
-cat k8s/k8s.yaml | sed 's/IMAGE_TAG/'$IMAGE_TAG'/g' | kubectl apply -f -
+if [[ -n "$deploy_only" ]]; then
+# do only the sections of yaml for this app
+  cat k8s/k8s.yaml \
+  | awk -v term="$deploy_only" '/^---/{if(s ~ "name: " term) print s; s=""} {s=s $0 ORS} END{if(s ~ "name: " term) print s}' \
+  | sed 's/IMAGE_TAG/'$IMAGE_TAG'/g' \
+  | kubectl apply -f -
+else
+  cat k8s/k8s.yaml \
+  | sed 's/IMAGE_TAG/'$IMAGE_TAG'/g' \
+  | kubectl apply -f -
+fi
 
 ## Now change this script to increment the version number, so next time it will be different.
 function sed_in_place {

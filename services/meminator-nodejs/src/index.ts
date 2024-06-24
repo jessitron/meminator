@@ -6,8 +6,27 @@ import { applyTextWithImagemagick } from "./applyTextWithImagemagick";
 import { applyTextWithLibrary } from "./applyTextWithLibrary";
 import { FeatureFlags } from "./featureFlags";
 import path from 'path';
+import winston from 'winston';
+import winstonExpress from 'express-winston';
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console({
+            format: winston.format.simple(),
+        }),
+    ],
+});
 
 const app = express();
+app.use(winstonExpress.logger({
+    winstonInstance: logger,
+    msg: "HTTP {{req.method}} {{req.url}}",
+    expressFormat: true,
+    colorize: false,
+    ignoreRoute: function () { return false; }
+}));
 const PORT = 10114;
 
 // Middleware to parse JSON bodies
@@ -31,20 +50,21 @@ app.post('/applyPhraseToPicture', async (req, res) => {
         // download the image, defaulting to a local image
         const inputImagePath = await download(imageUrl);
 
-        // await trace.getTracer('meminator').startActiveSpan('apply text', async (newSpan) => { // INSTRUMENTATION 2: a span that will have children
-        //const newSpan = trace.getTracer('meminator').startSpan('apply text'); // INSTRUMENTATION 1: put a span around it.... but it doesn't have children
-        if (new FeatureFlags().useLibrary()) {
-            // try out this new way. Is it faster?
-            const outputBuffer = await applyTextWithLibrary(inputImagePath, phrase);
-            res.writeHead(200, { 'Content-Type': 'image/png' });
-            res.end(outputBuffer);
-        } else {
-            // the same old way
-            const outputImagePath = await applyTextWithImagemagick(phrase, inputImagePath);
-            res.sendFile(outputImagePath);
-        }
-        //  newSpan.end(); // INSTRUMENTATION: you don't get telemetry for creating spans. You get it for ending spans
-        //  }); // INSTRUMENTATION 2: end the callback
+        await trace.getTracer('meminator').startActiveSpan('apply text', async (newSpan) => { // INSTRUMENTATION 2: a span that will have children
+            if (new FeatureFlags().useLibrary()) {
+                logger.log('info', "Using the new library to apply text to image");
+                // try out this new way. Is it faster?
+                const outputBuffer = await applyTextWithLibrary(inputImagePath, phrase);
+                res.writeHead(200, { 'Content-Type': 'image/png' });
+                res.end(outputBuffer);
+            } else {
+                logger.log('info', "Using the old way to apply text to image");
+                // the same old way
+                const outputImagePath = await applyTextWithImagemagick(phrase, inputImagePath);
+                res.sendFile(outputImagePath);
+            }
+            newSpan.end(); // INSTRUMENTATION: you don't get telemetry for creating spans. You get it for ending spans
+        }); // INSTRUMENTATION 2: end the callback
     }
     catch (error) {
         span?.recordException(error as Error); // INSTRUMENTATION: record exceptions. This will someday happen automatically in express instrumentation

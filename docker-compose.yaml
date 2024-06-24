@@ -29,6 +29,8 @@ services:
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
       - OTEL_SERVICE_NAME=meminator-nodejs
+      - OTEL_EXPORTER_OTLP_LOG_PROTOCOL=http
+      - OTEL_EXPORTER_OTLP_PROTOCOL=http
 
   phrase-picker:
     build:

@@ -24,9 +24,10 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
-    const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
-    span?.setAttribute('text.pointsize', pointsize);
+    // const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
+    // span?.setAttribute('text.pointsize', pointsize);
 
+    const pointsize = DEFAULT_POINTSIZE;
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,
         '-gravity', 'North',
@@ -37,11 +38,10 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         '-annotate', '0', `${phrase}`,
         outputImagePath];
 
-
     const processResult = await spawnProcess('convert', args);
 
-    // don't wait for this
-    checkWhetherTextFits(pointsize, DEFAULT_FONT, phrase, outputImagePath);
+    // Step 1: Notice how often it happens that the text does not fit
+    //checkWhetherTextFits(pointsize, DEFAULT_FONT, phrase, outputImagePath);
 
     return outputImagePath
 }
@@ -92,14 +92,15 @@ async function measureImageWidth(filepath: string) {
     });
 }
 
-async function reportPredictedWidth(imageFilename: string): Promise<number> {
-    return inSpanAsync('predict image width', { attributes: { "image.filename": imageFilename } }, async (span) => {
+// only create a span with the predicted image size on it. Is it the same as what we actually get?
+async function reportPredictedWidth(imageFilename: string) {
+    inSpanAsync('predict image width', { attributes: { "image.filename": imageFilename } }, async (span) => {
         const width = await predictImageWidth(imageFilename);
         span.setAttribute('image.predictedWidth', width);
-        return width;
     });
 }
 
+// based on what we're going to scale to, and the image we're starting with, what will the width be in pixels?
 async function predictImageWidth(imageFilename: string) {
     const result = await spawnProcess('identify', ['-format', '%wx%h', imageFilename]);
     if (result.code !== 0) {
@@ -122,10 +123,13 @@ async function predictImageWidth(imageFilename: string) {
     return finalWidth;
 }
 
+/**
+ * return the pointsize that will make the text fit in the image
+ */
 async function reducePointsizeToFit(inputImagePath: string, phrase: string, startingPointsize: number): Promise<number> {
     var pointsize = startingPointsize;
     return inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.startingPointsize": startingPointsize, } }, async (s) => {
-        const predictedImageWidth = await reportPredictedWidth(inputImagePath);
+        const predictedImageWidth = await predictImageWidth(inputImagePath);
         var tries = 0;
         while (await measureTextWidth(pointsize, DEFAULT_FONT, phrase) > await predictedImageWidth) {
             pointsize--;

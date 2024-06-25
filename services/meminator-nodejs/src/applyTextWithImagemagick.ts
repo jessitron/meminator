@@ -24,17 +24,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
-    var pointsize = DEFAULT_POINTSIZE;
-    await inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.defaultPointsize": DEFAULT_POINTSIZE, } }, async (s) => {
-        const predictedImageWidth = await reportPredictedWidth(inputImagePath);
-        var tries = 0;
-        while (await measureTextWidth(pointsize, DEFAULT_FONT, phrase) > await predictedImageWidth) {
-            pointsize--;
-            tries++;
-            logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
-        }
-        s.setAttributes({ "text.pointsize": pointsize, "text.triesToGetItToFit": tries, "text.defaultPointsize": DEFAULT_POINTSIZE, "image.predictedWidth": predictedImageWidth });
-    });
+    const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
     span?.setAttribute('text.pointsize', pointsize);
 
     const args = [inputImagePath,
@@ -130,4 +120,19 @@ async function predictImageWidth(imageFilename: string) {
         "image.finalWidth": finalWidth,
     });
     return finalWidth;
+}
+
+async function reducePointsizeToFit(inputImagePath: string, phrase: string, startingPointsize: number): Promise<number> {
+    var pointsize = startingPointsize;
+    return inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.startingPointsize": startingPointsize, } }, async (s) => {
+        const predictedImageWidth = await reportPredictedWidth(inputImagePath);
+        var tries = 0;
+        while (await measureTextWidth(pointsize, DEFAULT_FONT, phrase) > await predictedImageWidth) {
+            pointsize--;
+            tries++;
+            logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
+        }
+        s.setAttributes({ "text.pointsize": pointsize, "text.triesToGetItToFit": tries, "text.startingPointsize": startingPointsize, "image.predictedWidth": predictedImageWidth });
+        return pointsize;
+    });
 }

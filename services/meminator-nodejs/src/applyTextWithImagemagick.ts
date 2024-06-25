@@ -7,7 +7,7 @@ import { inSpanAsync } from "./o11yday-lib";
 
 const IMAGE_MAX_HEIGHT_PX = 1000;
 const IMAGE_MAX_WIDTH_PX = 1000;
-const FONT = 'Angkor-Regular';
+const DEFAULT_FONT = 'Angkor-Regular';
 const DEFAULT_POINTSIZE = 48;
 
 export async function applyTextWithImagemagick(phrase: string, inputImagePath: string) {
@@ -28,7 +28,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     await inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.defaultPointsize": DEFAULT_POINTSIZE, } }, async (s) => {
         const predictedImageWidth = await reportPredictedWidth(inputImagePath);
         var tries = 0;
-        while (await measureTextWidth(pointsize, FONT, phrase) > await predictedImageWidth) {
+        while (await measureTextWidth(pointsize, DEFAULT_FONT, phrase) > await predictedImageWidth) {
             pointsize--;
             tries++;
             logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
@@ -43,7 +43,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         '-pointsize', `${pointsize}`,
         '-fill', 'white',
         '-undercolor', '#00000080',
-        '-font', FONT,
+        '-font', DEFAULT_FONT,
         '-annotate', '0', `${phrase}`,
         outputImagePath];
 
@@ -51,7 +51,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     const processResult = await spawnProcess('convert', args);
 
     // don't wait for this
-    checkWhetherTextFits(pointsize, FONT, phrase, outputImagePath);
+    checkWhetherTextFits(pointsize, DEFAULT_FONT, phrase, outputImagePath);
 
     return outputImagePath
 }

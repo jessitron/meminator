@@ -3,8 +3,6 @@ import express, { Request, Response } from 'express';
 import { trace, SpanStatusCode } from '@opentelemetry/api';
 import { download } from "./download";
 import { applyTextWithImagemagick } from "./applyTextWithImagemagick";
-import { applyTextWithLibrary } from "./applyTextWithLibrary";
-import { FeatureFlags } from "./featureFlags";
 import path from 'path';
 import { logger } from './log-with-winston';
 import winstonExpress from 'express-winston';

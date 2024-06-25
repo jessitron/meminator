@@ -46,7 +46,7 @@ app.get('/phrase', async (req, res) => {
 
 function choose<T>(array: T[]): T {
     const i = Math.floor(Math.random() * array.length);
-    // trace.getActiveSpan()?.setAttributes({ "app.choiceIndex": i, "app.numberOfChoices": array.length }); // INSTRUMENTATION: add relevant info
+    trace.getActiveSpan()?.setAttributes({ "app.choiceIndex": i, "app.numberOfChoices": array.length }); 
     return array[i];
 }
 

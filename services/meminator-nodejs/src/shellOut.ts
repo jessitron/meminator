@@ -21,7 +21,7 @@ export function spawnProcess(commandName: string, args: string[]): Promise<Proce
     span.setAttributes({
         "app.command.name": commandName,
         "app.command.args": args.join(' ')
-    }); // INSTRUMENTATION: we definitely want a span for this
+    });
     return new Promise<ProcessOutput>((resolve, reject) => {
         const process = spawn(commandName, args);
         let stderrOutput = '';

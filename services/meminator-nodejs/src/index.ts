@@ -31,7 +31,7 @@ app.post('/applyPhraseToPicture', async (req, res) => {
     try {
         const input = req.body;
         let { phrase: inputPhrase, imageUrl } = input;
-        span?.setAttributes({ // INSTRUMENTATION: record important things
+        span?.setAttributes({
             "app.meminator.phrase": inputPhrase, "app.meminator.imageUrl": imageUrl,
             "app.meminator.imageExtension": imageUrl ? path.extname(imageUrl) : "none"
         });
@@ -40,16 +40,16 @@ app.post('/applyPhraseToPicture', async (req, res) => {
         // download the image, defaulting to a local image
         const inputImagePath = await download(imageUrl);
 
-        await trace.getTracer('meminator').startActiveSpan('apply text', async (newSpan) => { // INSTRUMENTATION 2: a span that will have children
+        await trace.getTracer('meminator').startActiveSpan('apply text', async (newSpan) => { 
             logger.log('info', "Using ImageMagick to apply text to image");
             // the same old way
             const outputImagePath = await applyTextWithImagemagick(phrase, inputImagePath);
             res.sendFile(outputImagePath);
-            newSpan.end(); // INSTRUMENTATION: you don't get telemetry for creating spans. You get it for ending spans
-        }); // INSTRUMENTATION 2: end the callback
+            newSpan.end(); // you don't get telemetry for creating spans. You get it for ending spans
+        });
     }
     catch (error) {
-        span?.recordException(error as Error); // INSTRUMENTATION: record exceptions. This will someday happen automatically in express instrumentation
+        span?.recordException(error as Error); 
         span?.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
         console.error('Error creating picture:', error);
         res.status(500).send('Internal Server Error');

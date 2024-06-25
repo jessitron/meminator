@@ -1,6 +1,7 @@
 import "./tracing"
 import express, { Request, Response } from 'express';
 import { fetchFromService } from "./o11yday-lib";
+import { trace } from "@opentelemetry/api"
 
 import winston from 'winston';
 import winstonExpress from 'express-winston';
@@ -32,7 +33,7 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.post('/createPicture', async (req: Request, res: Response) => {
-    //  const span = trace.getActiveSpan();
+    const span = trace.getActiveSpan();
     try {
         const [phraseResponse, imageResponse] = await Promise.all([
             fetchFromService('phrase-picker'),
@@ -40,7 +41,7 @@ app.post('/createPicture', async (req: Request, res: Response) => {
         ]);
         const phraseText = phraseResponse.ok ? await phraseResponse.text() : "{}";
         const imageText = imageResponse.ok ? await imageResponse.text() : "{}";
-        //    span?.setAttributes({ "app.phraseResponse": phraseText, "app.imageResponse": imageText }); // INSTRUMENTATION: add relevant info to span
+        span?.setAttributes({ "app.phraseResponse": phraseText, "app.imageResponse": imageText });
         logger.log('info', "Received responses from services", { phraseResponse: phraseText, imageResponse: imageText });
         const phraseResult = JSON.parse(phraseText);
         const imageResult = JSON.parse(imageText);

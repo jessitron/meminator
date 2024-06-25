@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 # Set your endpoint URL
-LOAD_URL="http://localhost:8080/backend/createPicture"
+LOAD_URL=${LOAD_URL:=http://localhost:8080/backend/createPicture}
 
 MIN_SLEEP=${MIN_SLEEP:=2}
 MAX_SLEEP=${MAX_SLEEP:=5}

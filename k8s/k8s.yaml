@@ -230,3 +230,35 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 80
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loadgen
+  namespace: o11yday
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loadgen
+  template:
+    metadata:
+      labels:
+        app: loadgen
+    spec:
+      containers:
+        - name: loadgen
+          image: o11yday/loadgen:IMAGE_TAG
+          imagePullPolicy: Always
+          env:
+            - name: LOAD_URL
+              value: "http://nginx:8080/backend/createPicture"
+            - name: OTEL_EXPORTER_OTLP_HEADERS
+              valueFrom:
+                secretKeyRef:
+                  name: o11yday-hny-header
+                  key: header
+            - name: OTEL_SERVICE_NAME
+              value: "image-picker-nodejs"

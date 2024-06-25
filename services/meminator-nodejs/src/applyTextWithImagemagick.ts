@@ -25,7 +25,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     });
 
     var pointsize = DEFAULT_POINTSIZE;
-    inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.defaultPointsize": DEFAULT_POINTSIZE, } }, async (s) => {
+    await inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.defaultPointsize": DEFAULT_POINTSIZE, } }, async (s) => {
         const predictedImageWidth = await reportPredictedWidth(inputImagePath);
         var tries = 0;
         while (await measureTextWidth(pointsize, FONT, 72, phrase) > await predictedImageWidth) {

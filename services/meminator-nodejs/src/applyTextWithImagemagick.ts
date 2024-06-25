@@ -7,13 +7,16 @@ import { inSpanAsync } from "./o11yday-lib";
 
 const IMAGE_MAX_HEIGHT_PX = 1000;
 const IMAGE_MAX_WIDTH_PX = 1000;
+const FONT = 'Angkor-Regular';
+const DEFAULT_POINTSIZE = 48;
 
 export async function applyTextWithImagemagick(phrase: string, inputImagePath: string) {
     const outputImagePath = `/tmp/${generateRandomFilename('png')}`;
+    const span = trace.getActiveSpan();
     logger.log('debug', `Applying text to image with ImageMagick: ${phrase} ${inputImagePath} ${outputImagePath}`, {
         phrase, inputImagePath, outputImagePath
     });
-    trace.getActiveSpan()?.setAttributes({
+    span?.setAttributes({
         "app.phrase": phrase,
         "app.meminate.inputImagePath": inputImagePath,
         "app.meminate.outputImagePath": outputImagePath,
@@ -21,18 +24,23 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
-    // don't wait for this. Just make a judgement
-    reportPredictedWidth(inputImagePath);
+    const predictedImageWidth = reportPredictedWidth(inputImagePath);
+    var pointsize = DEFAULT_POINTSIZE;
+    var tries = 0;
+    while (await measureTextWidth(pointsize, FONT, 72, phrase) > await predictedImageWidth) {
+        pointsize--;
+        tries++;
+        logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
+    }
+    span?.setAttributes({ "text.pointsize": pointsize, "text.triesToGetItToFit": tries, "text.defaultPointsize": DEFAULT_POINTSIZE });
 
-    const pointsize = 48;
-    const font = 'Angkor-Regular';
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,
         '-gravity', 'North',
         '-pointsize', `${pointsize}`,
         '-fill', 'white',
         '-undercolor', '#00000080',
-        '-font', font,
+        '-font', FONT,
         '-annotate', '0', `${phrase}`,
         outputImagePath];
 
@@ -40,7 +48,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     const processResult = await spawnProcess('convert', args);
 
     // don't wait for this
-    checkWhetherTextFits(pointsize, font, phrase, outputImagePath);
+    checkWhetherTextFits(pointsize, FONT, phrase, outputImagePath);
 
     return outputImagePath
 }
@@ -92,10 +100,11 @@ async function measureImageWidthAndDensity(filepath: string) {
     });
 }
 
-async function reportPredictedWidth(imageFilename: string) {
+async function reportPredictedWidth(imageFilename: string): Promise<number> {
     return inSpanAsync('predict image width', { attributes: { "image.filename": imageFilename } }, async (span) => {
         const width = await predictImageWidth(imageFilename);
         span.setAttribute('image.predictedWidth', width);
+        return width;
     });
 }
 

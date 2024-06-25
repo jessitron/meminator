@@ -24,7 +24,15 @@ const PHRASES = [
     "deploy != release",
     "oh, just the crimes",
     "not a bug, it's a feature",
-    "test in prod"
+    "test in prod",
+    "it's not a phase",
+    "this one time at PubConf",
+    "brillant",
+    "what getting married taught me",
+    "it was dns",
+    "entropy comes for us all",
+    "speed is safety",
+    "your turn will come",
 ]
 
 const app = express();
@@ -46,7 +54,7 @@ app.get('/phrase', async (req, res) => {
 
 function choose<T>(array: T[]): T {
     const i = Math.floor(Math.random() * array.length);
-    trace.getActiveSpan()?.setAttributes({ "app.choiceIndex": i, "app.numberOfChoices": array.length }); 
+    trace.getActiveSpan()?.setAttributes({ "app.choiceIndex": i, "app.numberOfChoices": array.length });
     return array[i];
 }
 

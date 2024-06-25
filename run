@@ -10,4 +10,6 @@ set -e
 
 docker compose up --build -d $*
 
+HONEYCOMB_API_KEY=$HONEYCOMB_API_KEY_LOCAL_MARKERS ./scripts/create-marker.sh $*
+
 echo "http://localhost:8080"

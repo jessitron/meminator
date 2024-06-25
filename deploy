@@ -9,7 +9,7 @@ me=$0
 deploy_only=$1
 
 source .env
-VERSION_NUMBER=20
+VERSION_NUMBER=21
 export IMAGE_TAG=byo-sre-$VERSION_NUMBER
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES
@@ -28,6 +28,8 @@ else
   | kubectl apply -f -
 fi
 
+HONEYCOMB_API_KEY=$HONEYCOMB_API_KEY_PROD_MARKERS VERSION_NUMBER=$VERSION_NUMBER ./scripts/create-marker.sh $deploy_ONLY
+
 ## Now change this script to increment the version number, so next time it will be different.
 function sed_in_place {
   expr=$1
@@ -43,6 +45,6 @@ function sed_in_place {
   fi
 }
 
-echo "Deploying from $me with VERSION_NUMBER $VERSION_NUMBER"
+echo "Deployed from $me with VERSION_NUMBER $VERSION_NUMBER"
 
 sed_in_place "s/VERSION_NUMBER=$VERSION_NUMBER/VERSION_NUMBER=$(( VERSION_NUMBER + 1 ))/" $me

@@ -36,12 +36,7 @@ spec:
             - containerPort: 10114
           env:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "https://api.honeycomb.io"
-            - name: OTEL_EXPORTER_OTLP_HEADERS
-              valueFrom:
-                secretKeyRef:
-                  name: o11yday-hny-header
-                  key: header
+              value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
               value: "backend-for-frontend-nodejs"
 
@@ -85,12 +80,7 @@ spec:
             - containerPort: 10114
           env:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "https://api.honeycomb.io"
-            - name: OTEL_EXPORTER_OTLP_HEADERS
-              valueFrom:
-                secretKeyRef:
-                  name: o11yday-hny-header
-                  key: header
+              value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
               value: "meminator-nodejs"
 
@@ -134,12 +124,7 @@ spec:
             - containerPort: 10114
           env:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "https://api.honeycomb.io"
-            - name: OTEL_EXPORTER_OTLP_HEADERS
-              valueFrom:
-                secretKeyRef:
-                  name: o11yday-hny-header
-                  key: header
+              value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
               value: "phrase-picker-nodejs"
 
@@ -183,12 +168,7 @@ spec:
             - containerPort: 10114
           env:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: "https://api.honeycomb.io"
-            - name: OTEL_EXPORTER_OTLP_HEADERS
-              valueFrom:
-                secretKeyRef:
-                  name: o11yday-hny-header
-                  key: header
+              value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
               value: "image-picker-nodejs"
 

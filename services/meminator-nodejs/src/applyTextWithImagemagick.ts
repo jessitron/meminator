@@ -68,8 +68,8 @@ async function measureTextWidth(pointsize: number, font: string, imageDensity: n
         '-pointsize', `${pointsize}`,
         '-font', `${font}`,
         '-format', '%w',
-        '-density', `${imageDensity}`,
-        `caption:${text}`,
+        //   '-density', `${imageDensity}`,
+        `label:${text}`,
         'info:'])
     // convert stdout to int
     const width = parseInt(result.stdout);

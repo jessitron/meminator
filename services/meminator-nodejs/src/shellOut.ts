@@ -23,7 +23,7 @@ export function spawnProcess(commandName: string, args: string[]): Promise<Proce
         "app.command.args": args.join(' ')
     });
     return new Promise<ProcessOutput>((resolve, reject) => {
-        const process = spawn(commandName, args);
+        const process = spawn(commandName, args, { timeout: 30000 });
         let stderrOutput = '';
         process.stderr.on('data', (data) => {
             stderrOutput += data;

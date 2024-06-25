@@ -28,7 +28,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     await inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.defaultPointsize": DEFAULT_POINTSIZE, } }, async (s) => {
         const predictedImageWidth = await reportPredictedWidth(inputImagePath);
         var tries = 0;
-        while (await measureTextWidth(pointsize, FONT, 72, phrase) > await predictedImageWidth) {
+        while (await measureTextWidth(pointsize, FONT, phrase) > await predictedImageWidth) {
             pointsize--;
             tries++;
             logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
@@ -58,15 +58,14 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
 
 async function checkWhetherTextFits(pointsize: number, font: string, text: string, imageFilename: string) {
     return inSpanAsync('check text width', { attributes: { "text.pointsize": pointsize, "text.font": font, "text.content": text, "text.length": text.length } }, async (span) => {
-        const { width: imageWidth, density: imageDensity } = await measureImageWidthAndDensity(imageFilename);
-        span.setAttributes({ 'image.width': imageWidth, 'image.density': imageDensity });
-        const textWidth = await measureTextWidth(pointsize, font, imageDensity, text,);
+        const { width: imageWidth } = await measureImageWidth(imageFilename);
+        span.setAttributes({ 'image.width': imageWidth });
+        const textWidth = await measureTextWidth(pointsize, font, text,);
         if (textWidth > imageWidth) {
             logger.log('warn', `Text width is greater than image width: ${textWidth} > ${imageWidth}`, {
                 "text.width": textWidth,
                 "image.width": imageWidth,
                 "text.content": text,
-                "image.density": imageDensity,
                 "text.length": text.length
             });
         }
@@ -74,7 +73,7 @@ async function checkWhetherTextFits(pointsize: number, font: string, text: strin
     });
 }
 
-async function measureTextWidth(pointsize: number, font: string, imageDensity: number, text: string): Promise<number> {
+async function measureTextWidth(pointsize: number, font: string, text: string): Promise<number> {
     const result = await spawnProcess('convert', [
         '-pointsize', `${pointsize}`,
         '-font', `${font}`,
@@ -90,7 +89,7 @@ async function measureTextWidth(pointsize: number, font: string, imageDensity: n
     return width;
 }
 
-async function measureImageWidthAndDensity(filepath: string) {
+async function measureImageWidth(filepath: string) {
     return await spawnProcess('identify', ['-format', '%w %x', filepath]).then((result) => {
         const [width, density] = result.stdout.split(' ').map((s) => parseInt(s));
         logger.log('debug', `Identify on output file: ${result.stdout}`, {

@@ -46,6 +46,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     return outputImagePath
 }
 
+// If the text does not fit, log a warning
 async function checkWhetherTextFits(pointsize: number, font: string, text: string, imageFilename: string) {
     return inSpanAsync('check text width', { attributes: { "text.pointsize": pointsize, "text.font": font, "text.content": text, "text.length": text.length } }, async (span) => {
         const { width: imageWidth } = await measureImageWidth(imageFilename);

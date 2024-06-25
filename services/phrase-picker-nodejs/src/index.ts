@@ -1,6 +1,6 @@
 import "./tracing"
 import express, { Request, Response } from 'express';
-import { trace, context } from '@opentelemetry/api';
+import { trace } from '@opentelemetry/api';
 import { logger } from "./logger"
 
 logger.info("A thing!")

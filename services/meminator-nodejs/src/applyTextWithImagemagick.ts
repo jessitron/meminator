@@ -106,7 +106,7 @@ async function predictImageWidth(imageFilename: string) {
     }
     const [width, height] = result.stdout.split('x').map((s) => parseInt(s));
     // we are going to resize the  image to IMAGE_MAX_WIDTH_PX x IMAGE_MAX_HEIGHT_PX
-    const ratioForHeightLimitation = Math.max(IMAGE_MAX_HEIGHT_PX / height, 1);
+    const ratioForHeightLimitation = Math.min(IMAGE_MAX_HEIGHT_PX / height, 1);
     const widthLimitedByHeight = width * ratioForHeightLimitation;
     const finalWidth = Math.min(width, IMAGE_MAX_WIDTH_PX, widthLimitedByHeight)
     trace.getActiveSpan()?.setAttributes({

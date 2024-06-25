@@ -24,15 +24,18 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
-    const predictedImageWidth = reportPredictedWidth(inputImagePath);
     var pointsize = DEFAULT_POINTSIZE;
-    var tries = 0;
-    while (await measureTextWidth(pointsize, FONT, 72, phrase) > await predictedImageWidth) {
-        pointsize--;
-        tries++;
-        logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
-    }
-    span?.setAttributes({ "text.pointsize": pointsize, "text.triesToGetItToFit": tries, "text.defaultPointsize": DEFAULT_POINTSIZE });
+    inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.defaultPointsize": DEFAULT_POINTSIZE, } }, async (s) => {
+        const predictedImageWidth = await reportPredictedWidth(inputImagePath);
+        var tries = 0;
+        while (await measureTextWidth(pointsize, FONT, 72, phrase) > await predictedImageWidth) {
+            pointsize--;
+            tries++;
+            logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })
+        }
+        s.setAttributes({ "text.pointsize": pointsize, "text.triesToGetItToFit": tries, "text.defaultPointsize": DEFAULT_POINTSIZE, "image.predictedWidth": predictedImageWidth });
+    });
+    span?.setAttribute('text.pointsize', pointsize);
 
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,

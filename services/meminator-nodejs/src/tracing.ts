@@ -3,6 +3,7 @@ import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-proto";
 import * as opentelemetry from '@opentelemetry/api';
+import { AddMetricsSpanProcessor } from './putMetricsOnSpans';
 
 opentelemetry.diag.setLogger(
     new opentelemetry.DiagConsoleLogger(),
@@ -13,7 +14,7 @@ opentelemetry.diag.setLogger(
 const traceExporter = new OTLPTraceExporter();
 
 const sdk = new NodeSDK({
-    spanProcessors: [new BatchSpanProcessor(traceExporter, {
+    spanProcessors: [new AddMetricsSpanProcessor(), new BatchSpanProcessor(traceExporter, {
         maxQueueSize: 5000, // at startup, we get a LOT of spans from fs-instrumentation
         scheduledDelayMillis: 1000,
     })],

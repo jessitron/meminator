@@ -2,6 +2,7 @@ import fs from 'fs';
 import { trace } from '@opentelemetry/api';
 import crypto from 'crypto';
 import path from 'path';
+import { IMAGE_STORAGE_PATH } from './configuratino';
 
 const DEFAULT_IMAGE_PATH = '../tmp/BusinessWitch.png';
 
@@ -17,7 +18,7 @@ export async function download(inputImageUrl: string): Promise<string> {
     if (!inputImageUrl) {
        throw new Error('No input image URL provided');
     }
-    const downloadDestinationPath = `/tmp/${generateRandomFilename(path.extname(inputImageUrl))}`;
+    const downloadDestinationPath = `${IMAGE_STORAGE_PATH}/${generateRandomFilename(path.extname(inputImageUrl))}`;
 
     await fetch(inputImageUrl)
         .then(async (download) => {

@@ -4,6 +4,7 @@ import { trace } from '@opentelemetry/api';
 import { spawnProcess } from "./shellOut";
 import { logger } from './log-with-winston';
 import { inSpanAsync } from "./o11yday-lib";
+import { IMAGE_STORAGE_PATH } from "./configuratino";
 
 const IMAGE_MAX_HEIGHT_PX = 1000;
 const IMAGE_MAX_WIDTH_PX = 1000;
@@ -11,7 +12,7 @@ const DEFAULT_FONT = 'Angkor-Regular';
 const DEFAULT_POINTSIZE = 48;
 
 export async function applyTextWithImagemagick(phrase: string, inputImagePath: string) {
-    const outputImagePath = `/tmp/${generateRandomFilename('png')}`;
+    const outputImagePath = `/${IMAGE_STORAGE_PATH}/${generateRandomFilename('png')}`;
     const span = trace.getActiveSpan();
     logger.log('debug', `Applying text to image with ImageMagick: ${phrase} ${inputImagePath} ${outputImagePath}`, {
         phrase, inputImagePath, outputImagePath

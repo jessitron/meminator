@@ -9,7 +9,7 @@ fi
 body=$(echo '{"message":"'$message'", "type":"deploy"}')
 
 if [[ -n "$1" ]]; then
-    dataset=$1
+    dataset="$1-nodejs" # this is the OTEL_SERVICE_NAME from docker-compose.yml or k8s.yaml for the service of name $1. We happen to have a convention, it won't work for 'web'
 else
   dataset="__all__"
 fi

@@ -4,26 +4,8 @@ import { ReadableSpan, Span, SpanProcessor } from '@opentelemetry/sdk-trace-base
 
 import { statfs } from 'fs';
 import { IMAGE_STORAGE_PATH } from './configuratino';
-
-type Space = {
-    free: number;
-    available: number;
-}
-
-function fetchAvailableSpace(): Promise<Space> {
-    return new Promise((resolve, reject) => {
-        statfs(IMAGE_STORAGE_PATH, (err, stats) => {
-            if (err) {
-                reject(err);
-            }
-            const result = {
-                free: stats.bsize * stats.bfree,
-                available: stats.bsize * stats.bavail
-            };
-            resolve(result);
-        });
-    });
-}
+import { check, DiskUsage } from "diskusage"
+import { DEFAULT_LOGGER_NAME } from '@opentelemetry/sdk-logs/build/src/LoggerProvider';
 
 class MetricKnowerAbouter<Data> {
     private cache?: { lastFetched: Date, data: Data }
@@ -51,7 +33,7 @@ class MetricKnowerAbouter<Data> {
 }
 
 export class AddMetricsSpanProcessor implements SpanProcessor {
-    private readonly availableSpace = new MetricKnowerAbouter<Space>(() => fetchAvailableSpace(), 1000);
+    private readonly availableSpace = new MetricKnowerAbouter<DiskUsage>(() => check(IMAGE_STORAGE_PATH), 1000);
 
     onStart(span: Span, _parentContext: Context): void {
         span.setAttribute('metrics.processor', 'AddMetricsSpanProcessor');
@@ -59,6 +41,7 @@ export class AddMetricsSpanProcessor implements SpanProcessor {
         if (space) {
             span.setAttribute('metrics.diskSpace.free', space.free);
             span.setAttribute('metrics.diskSpace.available', space.available);
+            span.setAttribute('metrics.diskSpace.used', space.total - space.free);
         }
     }
 

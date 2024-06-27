@@ -51,8 +51,7 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
 async function checkWhetherTextFits(pointsize: number, font: string, text: string, imageFilename: string) {
     return inSpanAsync('check text width', { attributes: { "text.pointsize": pointsize, "text.font": font, "text.content": text, "text.length": text.length } }, async (span) => {
         const { width: imageWidth } = await measureImageWidth(imageFilename);
-        span.setAttributes({ 'image.width': imageWidth });
-        const textWidth = await measureTextWidth(pointsize, font, text,);
+        const { width: textWidth } = await measureTextWidth(pointsize, font, text,);
         if (textWidth > imageWidth) {
             logger.log('warn', `Text width is greater than image width: ${textWidth} > ${imageWidth}`, {
                 "text.width": textWidth,
@@ -65,7 +64,7 @@ async function checkWhetherTextFits(pointsize: number, font: string, text: strin
     });
 }
 
-async function measureTextWidth(pointsize: number, font: string, text: string): Promise<number> {
+async function measureTextWidth(pointsize: number, font: string, text: string){
     const result = await spawnProcess('convert', [
         '-pointsize', `${pointsize}`,
         '-font', `${font}`,
@@ -78,7 +77,7 @@ async function measureTextWidth(pointsize: number, font: string, text: string): 
     if (Number.isNaN(width)) {
         throw new Error(`Could not parse width from ImageMagick output: ${result.stdout}`);
     }
-    return width;
+    return { width };
 }
 
 async function measureImageWidth(filepath: string) {
@@ -133,7 +132,7 @@ async function reducePointsizeToFit(inputImagePath: string, phrase: string, star
     return inSpanAsync('reduce pointsize to fit text', { attributes: { "text.content": phrase, "text.startingPointsize": startingPointsize, } }, async (s) => {
         const predictedImageWidth = await predictImageWidth(inputImagePath);
         var tries = 0;
-        while (await measureTextWidth(pointsize, DEFAULT_FONT, phrase) > await predictedImageWidth) {
+        while ((await measureTextWidth(pointsize, DEFAULT_FONT, phrase)).width > await predictedImageWidth) {
             pointsize--;
             tries++;
             logger.debug("Reducing pointsize to fit text in image", { "text.pointsize": pointsize, "text.content": phrase, "text.targetWidth": predictedImageWidth })

@@ -64,7 +64,7 @@ async function checkWhetherTextFits(pointsize: number, font: string, text: strin
     });
 }
 
-async function measureTextWidth(pointsize: number, font: string, text: string){
+async function measureTextWidth(pointsize: number, font: string, text: string) {
     const result = await spawnProcess('convert', [
         '-pointsize', `${pointsize}`,
         '-font', `${font}`,
@@ -108,10 +108,12 @@ async function predictImageWidth(imageFilename: string) {
         throw new Error(`Could not get image dimensions from ImageMagick: ${result.stderr}`);
     }
     const [width, height] = result.stdout.split('x').map((s) => parseInt(s));
+
     // we are going to resize the  image to IMAGE_MAX_WIDTH_PX x IMAGE_MAX_HEIGHT_PX
-    const ratioForHeightLimitation = Math.min(IMAGE_MAX_HEIGHT_PX / height, 1);
+    const ratioForHeightLimitation = Math.min(IMAGE_MAX_HEIGHT_PX / height, 1); // consider re-introducing bug
     const widthLimitedByHeight = width * ratioForHeightLimitation;
     const finalWidth = Math.min(width, IMAGE_MAX_WIDTH_PX, widthLimitedByHeight)
+
     trace.getActiveSpan()?.setAttributes({
         "image.width": width,
         "image.height": height,
@@ -119,7 +121,7 @@ async function predictImageWidth(imageFilename: string) {
         "image.widthLimitedByHeight": widthLimitedByHeight,
         "image.maxWidth": IMAGE_MAX_WIDTH_PX,
         "image.maxHeight": IMAGE_MAX_HEIGHT_PX,
-        "image.finalWidth": finalWidth,
+        "image.predictedWidth": finalWidth,
     });
     return finalWidth;
 }

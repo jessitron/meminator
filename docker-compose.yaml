@@ -139,6 +139,7 @@ services:
       - LOAD_URL=http://web/backend/createPicture
       - MIN_SLEEP=1
       - MAX_SLEEP=5
+      - HONEYCOMB_API_KEY
 
 volumes:
   opensearch-data:

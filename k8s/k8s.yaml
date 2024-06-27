@@ -83,6 +83,8 @@ spec:
               value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
               value: "meminator-nodejs"
+            - name: OTEL_EXPORTER_OTLP_LOG_PROTOCOL
+              value: http
 
 ---
 
@@ -235,10 +237,8 @@ spec:
           env:
             - name: LOAD_URL
               value: "http://nginx:8080/backend/createPicture"
-            - name: OTEL_EXPORTER_OTLP_HEADERS
+            - name: HONEYCOMB_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: o11yday-hny-header
-                  key: header
-            - name: OTEL_SERVICE_NAME
-              value: "image-picker-nodejs"
+                  name: o11yday-hny-api-key
+                  key: api-key

@@ -85,6 +85,8 @@ spec:
               value: "meminator-nodejs"
             - name: OTEL_EXPORTER_OTLP_LOG_PROTOCOL
               value: http
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: http
 
 ---
 

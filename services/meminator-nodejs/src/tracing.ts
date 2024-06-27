@@ -43,6 +43,7 @@ const loggerProvider = new LoggerProvider({
     resource: new Resource({
         // in order to give it a service name.
         [SEMRESATTRS_SERVICE_NAME]: process.env.OTEL_SERVICE_NAME,
+        "k8s.namespace.name": "o11yday", // cheat
     }),
 });
 

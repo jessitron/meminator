@@ -110,7 +110,7 @@ async function predictImageWidth(imageFilename: string) {
     const [width, height] = result.stdout.split('x').map((s) => parseInt(s));
 
     // we are going to resize the  image to IMAGE_MAX_WIDTH_PX x IMAGE_MAX_HEIGHT_PX
-    const ratioForHeightLimitation = Math.min(IMAGE_MAX_HEIGHT_PX / height, 1); // consider re-introducing bug
+    const ratioForHeightLimitation = Math.min(IMAGE_MAX_HEIGHT_PX / height, 1); // I had a bug here, it was max instead of min
     const widthLimitedByHeight = width * ratioForHeightLimitation;
     const finalWidth = Math.min(width, IMAGE_MAX_WIDTH_PX, widthLimitedByHeight)
 

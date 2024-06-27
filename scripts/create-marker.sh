@@ -4,7 +4,7 @@ ref=$(git rev-parse HEAD | cut -c1-10)
 if [[ -z "$VERSION_NUMBER" ]]; then
     message="ref:$ref"
 else
-    message="v$VERSION_NUMBER ref:$ref"
+    message="v$VERSION_NUMBER $1 ref:$ref"
 fi
 body=$(echo '{"message":"'$message'", "type":"deploy"}')
 

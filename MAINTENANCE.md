@@ -70,3 +70,9 @@ This one will always be in a Docker container, because it has 'imagemagick' inst
 It downloads the image to the local filesystem, then runs imagemagick to overlay the text, then returns the result (as binary image data).
 
 It throws files in /tmp, which it never cleans out.
+
+and then Kubernetes evicts it, and hundreds of these accumulate in my namespace. Run this to delete all the evicted pods:
+
+`kubectl get pod -n o11yday | grep Evicted | awk '{print $1}' | xargs kubectl delete pod -n o11yday` 
+
+

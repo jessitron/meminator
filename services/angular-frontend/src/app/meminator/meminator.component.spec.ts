@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MeminatorComponent } from './meminator.component';
+import {HttpClient} from "@angular/common/http";
 
 describe('MeminatorComponent', () => {
   let component: MeminatorComponent;
@@ -8,7 +9,8 @@ describe('MeminatorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MeminatorComponent]
+      providers: [HttpClient],
+      imports: [MeminatorComponent],
     })
     .compileComponents();
 

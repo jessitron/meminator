@@ -12,7 +12,5 @@
     "parcel-bundler": "^1.12.5"
   },
   "dependencies": {
-    "@honeycombio/opentelemetry-web": "^0.1.0",
-    "@opentelemetry/auto-instrumentations-web": "^0.37.0"
   }
 }

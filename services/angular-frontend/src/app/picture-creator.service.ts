@@ -11,6 +11,6 @@ export class PictureCreatorService {
   createPicture() {
     return this.http.post('/backend/createPicture', {}, {
       responseType: 'blob'
-    })
+    });
   }
 }

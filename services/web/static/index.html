@@ -9,6 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
 
+    <script src="https://unpkg.com/@jessitronica/hny-otel-web@0.9.0/dist/hny.js"></script>
+    <script>
+        window.Hny.initializeTracing({
+            debug: true,
+            apiKey: "hcaik_01j9set397q4d5s33esg4wf1fpmbhd3rmz89mbek7xscqd3dq87x2yhcpq",
+            serviceName: "meminator-web",
+        });
+    </script>
     <style>
         body {
             text-align: center;
@@ -43,7 +51,7 @@
         }
 
         div {
-            font-weight:bolder;
+            font-weight: bolder;
             font-size: 1.2em;
         }
 

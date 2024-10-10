@@ -227,6 +227,10 @@ spec:
           image: o11yday/loadgen:IMAGE_TAG
           imagePullPolicy: Always
           env:
+            - name: MAX_SLEEP
+              value: "4"
+            - name: MIN_SLEEP
+              value: "1"
             - name: LOAD_URL
               value: "http://nginx:8080/backend/createPicture"
             - name: HONEYCOMB_API_KEY

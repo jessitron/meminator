@@ -9,7 +9,7 @@ me=$0
 deploy_only=$1
 
 source .env
-VERSION_NUMBER=36
+VERSION_NUMBER=37
 export IMAGE_TAG=byo-sre-$VERSION_NUMBER
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES

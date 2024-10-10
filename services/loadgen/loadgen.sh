@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 # Set your endpoint URL
 LOAD_URL=${LOAD_URL:=http://localhost:8080/backend/createPicture}
 
@@ -12,7 +10,6 @@ echo "Min sleep: $MIN_SLEEP"
 echo "Max sleep: $MAX_SLEEP"
 echo "URL to hit: $LOAD_URL"
 
-quote="'"
 
 function tell_hny_about_sleep {
     duration=$1
@@ -23,8 +20,7 @@ function tell_hny_about_sleep {
   "service.name": "meminator-loadgen"
 }
 EOF)
-  echo $json_data
-    curl -i -X POST \
+    curl -X POST \
   'https://api.honeycomb.io/1/events/meminator-loadgen' \
   -H 'Content-Type: application/json' \
   -H "X-Honeycomb-Team: $HONEYCOMB_API_KEY" \

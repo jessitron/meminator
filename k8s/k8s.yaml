@@ -12,14 +12,13 @@ spec:
       targetPort: 10114
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-for-frontend
   namespace: o11yday
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backend-for-frontend
@@ -41,7 +40,6 @@ spec:
               value: "backend-for-frontend-nodejs"
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -56,14 +54,13 @@ spec:
       targetPort: 10114
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: meminator
   namespace: o11yday
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: meminator
@@ -89,7 +86,6 @@ spec:
               value: http
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -104,7 +100,6 @@ spec:
       targetPort: 10114
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -133,7 +128,6 @@ spec:
               value: "phrase-picker-nodejs"
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -148,7 +142,6 @@ spec:
       targetPort: 10114
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -177,7 +170,6 @@ spec:
               value: "image-picker-nodejs"
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -192,7 +184,6 @@ spec:
       targetPort: 80
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -216,7 +207,6 @@ spec:
             - containerPort: 80
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:

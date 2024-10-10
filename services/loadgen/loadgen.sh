@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -x
 
 # Set your endpoint URL
 LOAD_URL=${LOAD_URL:=http://localhost:8080/backend/createPicture}
@@ -10,17 +12,17 @@ echo "Min sleep: $MIN_SLEEP"
 echo "Max sleep: $MAX_SLEEP"
 echo "URL to hit: $LOAD_URL"
 
+quote="'"
+
 function tell_hny_about_sleep {
     duration=$1
-    body=$(echo '{
-    "name": "sleep between requests",
-    "duration_ms":' $duration '
-  }')
+    body=$(echo '{ "name": "sleep between requests", "duration_ms":' $duration ', "service.name": "meminator-loadgen",}')
+  echo $body
     curl -i -X POST \
-  'https://api.honeycomb.io/1/events/loadgen' \
+  'https://api.honeycomb.io/1/events/meminator-loadgen' \
   -H 'Content-Type: application/json' \
-  -H "X-Honeycomb-Team: $HONEYCOMB_API_KEY " \
-  -d $body
+  -H "X-Honeycomb-Team: $HONEYCOMB_API_KEY" \
+  -d "{ \"name\": \"sleep between requests\", \"duration_ms\":' $duration ', "service.name": "meminator-loadgen",}'
 }
 
 while true; do

@@ -8,38 +8,39 @@ logger.info("A thing!")
 const PHRASES = [
     "H-O-T-T-O-G-O", // Springfield
     "I'm a doctor and a lawyer", // Springfield
+    "I'm a doctor and a lawyer", // Springfield - doubling up for frequency
     "We have an airport!", // Springfield
     "not trout", // Springfield
     "you're muted",
     "not dead yet",
     "Let them.",
-    "Boiling Loves Company",
+ //   "Boiling Loves Company",
     "Must we?",
     "SRE not-sorry",
-    "Honeycomb at home",
-    "There is no cloud",
+ //   "Honeycomb at home",
+ //   "There is no cloud",
     "This is fine",
     "It's a trap!",
-    "Not Today",
+//    "Not Today",
     "You had one job",
     "bruh",
     "have you tried restarting?",
-    "try again after coffee",
+ //   "try again after coffee",
     "deploy != release",
     "oh, just the crimes",
     "not a bug, it's a feature",
     "test in prod",
-    "it's not a phase",
+ //   "it's not a phase",
    // "this one time at PubConf", // KCDC
-    "brillant",
+ //   "brillant",
     "what getting married taught me",
     "it was dns",
-    "entropy comes for us all",
-    "speed is safety",
-    "your turn will come",
+  //  "entropy comes for us all",
+ //   "speed is safety",
+  //  "your turn will come",
     "all the best things are stupid",
-    "I'm paid to worry",
-    "I'm down if you're up for it"
+ //   "I'm paid to worry",
+  //  "I'm down if you're up for it"
 ]
 
 const app = express();

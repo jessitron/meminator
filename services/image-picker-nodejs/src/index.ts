@@ -11,6 +11,7 @@ const IMAGES = [
     "heatmap.png",
     "angry-lemon-ufo.JPG",
     "austintiara4.png",
+    "baby-roswell-tall.png",
     "baby-geese.jpg",
     "bbq.jpg",
     "beach.JPG",
@@ -30,7 +31,6 @@ const IMAGES = [
     "flower.jpg",
     "frenwho.png",
     "genshin-spa.jpg",
-    "grass-and-desert-guy.png",
     "honeycomb-dogfood-logo.png",
     "horse-maybe.png",
     "is-this-emeri.png",
@@ -39,8 +39,6 @@ const IMAGES = [
     "keys-drying.jpg",
     "lime-on-soap-dispenser.jpg",
     "loki-closeup.jpg",
-    "lynia.png",
-    "ninguang-at-work.png",
     "paul-r-allen.png",
     "please.png",
     "roswell-nose.jpg",
@@ -50,14 +48,19 @@ const IMAGES = [
     "square-leaf-with-nuts.jpg",
     "stu.jpeg",
     "sweating-it.png",
-    "tanuki.png",
     "tennessee-sunset.JPG",
     "this-is-fine-trash.jpg",
-    "three-pillars-2.png",
     "trash-flat.jpg",
     "walrus-painting.jpg",
     "windigo.png",
     "yellow-lines.JPG",
+    "big-foot.png",    // SPRINGFIELD
+    "brad-bradshaw.png",    // SPRINGFIELD
+    "cat-astronaut-statue.jpg",    // SPRINGFIELD
+    "giant-fork.jpg",    // SPRINGFIELD
+    "mini-golf-dinosaur.jpg",    // SPRINGFIELD
+    "phone-booth-sculpture.jpg",    // SPRINGFIELD
+    "pineapple-whip-storm.png",    // SPRINGFIELD
 ].map((filename) => `https://${BUCKET_NAME}.s3.amazonaws.com/${filename}`);
 
 const app = express();

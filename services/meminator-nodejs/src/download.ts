@@ -43,11 +43,11 @@ export async function download(inputImageUrl: string): Promise<string> {
             span?.recordException(err);
             span?.setAttributes({
                 "warn.message": "Image failed to download: " + err.message,
-                "app.inputImageUrl": inputImageUrl,
+                "app.imageUrl": inputImageUrl,
                 "app.default.imagePath": DEFAULT_IMAGE_PATH,
             });
             return path.join(__dirname, DEFAULT_IMAGE_PATH);
-        });
+        }); 
 
     // span?.setAttributes({
     //     "app.download.inputImageUrl": inputImageUrl,

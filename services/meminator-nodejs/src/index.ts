@@ -30,8 +30,8 @@ app.post('/applyPhraseToPicture', async (req, res) => {
         const input = req.body;
         let { phrase: inputPhrase, imageUrl } = input;
         span?.setAttributes({
-            "app.meminator.phrase": inputPhrase, "app.meminator.imageUrl": imageUrl,
-            "app.meminator.imageExtension": imageUrl ? path.extname(imageUrl) : "none"
+            "app.phrase": inputPhrase, "app.imageUrl": imageUrl,
+            "app.imageExtension": imageUrl ? path.extname(imageUrl) : "none"
         });
         const phrase = inputPhrase.toLocaleUpperCase();
 

@@ -25,12 +25,12 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
-    //reportPredictedWidth(inputImagePath);
+    reportPredictedWidth(inputImagePath);
 
-    const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
-    span?.setAttribute('text.pointsize', pointsize);
+  //  const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
+   // span?.setAttribute('text.pointsize', pointsize);
 
-    //const pointsize = DEFAULT_POINTSIZE;
+    const pointsize = DEFAULT_POINTSIZE;
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,
         '-gravity', 'North',

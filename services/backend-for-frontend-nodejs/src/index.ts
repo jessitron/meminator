@@ -42,9 +42,10 @@ app.post('/createPicture', async (req: Request, res: Response) => {
         const phraseText = phraseResponse.ok ? await phraseResponse.text() : "{}";
         const imageText = imageResponse.ok ? await imageResponse.text() : "{}";
         span?.setAttributes({ "app.phraseResponse": phraseText, "app.imageResponse": imageText });
-        logger.log('info', "Received responses from services", { phraseResponse: phraseText, imageResponse: imageText });
+        logger.log('info', "Received responses from services", { "app.phraseResponse": phraseText, "app.imageResponse": imageText });
         const phraseResult = JSON.parse(phraseText);
         const imageResult = JSON.parse(imageText);
+        span?.setAttributes({ "app.phrase": phraseResult.phrase, "app.imageUrl": imageResult.imageUrl });
 
         const response = await fetchFromService('meminator', {
             method: "POST",

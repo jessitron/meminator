@@ -16,13 +16,19 @@ quote="'"
 
 function tell_hny_about_sleep {
     duration=$1
-    body=$(echo '{ "name": "sleep between requests", "duration_ms":' $duration ', "service.name": "meminator-loadgen",}')
-  echo $body
+    json_data=$(cat <<EOF
+{
+  "name": "sleep between requests",
+  "duration_ms": $duration,
+  "service.name": "meminator-loadgen"
+}
+EOF)
+  echo $json_data
     curl -i -X POST \
   'https://api.honeycomb.io/1/events/meminator-loadgen' \
   -H 'Content-Type: application/json' \
   -H "X-Honeycomb-Team: $HONEYCOMB_API_KEY" \
-  -d "{ \"name\": \"sleep between requests\", \"duration_ms\":' $duration ', "service.name": "meminator-loadgen",}'
+  -d "$json_data"
 }
 
 while true; do

@@ -26,13 +26,13 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
     });
 
     // Step 2: see if we can predict the width of the image
-    reportPredictedWidth(inputImagePath);
+    // reportPredictedWidth(inputImagePath);
 
     // Step 3: implement the text fitting
-    // const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
-    // span?.setAttribute('text.pointsize', pointsize);
+    const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
+    span?.setAttribute('text.pointsize', pointsize);
 
-    const pointsize = DEFAULT_POINTSIZE;
+   // const pointsize = DEFAULT_POINTSIZE;
     const args = [inputImagePath,
         '-resize', `${IMAGE_MAX_WIDTH_PX}x${IMAGE_MAX_HEIGHT_PX}\>`,
         '-gravity', 'North',
@@ -113,7 +113,7 @@ async function predictImageWidth(imageFilename: string) {
     }
     const [width, height] = result.stdout.split('x').map((s) => parseInt(s));
 
-    // we are going to resize the image to IMAGE_MAX_WIDTH_PX x IMAGE_MAX_HEIGHT_PX
+    // we are going to resize the image to  IMAGE_MAX_WIDTH_PX x IMAGE_MAX_HEIGHT_PX
     const ratioForHeightLimitation = Math.min(IMAGE_MAX_HEIGHT_PX / height, 1); // I had a bug here, it was max instead of min
     const widthLimitedByHeight = width * ratioForHeightLimitation;
     const finalWidth = Math.min(width, IMAGE_MAX_WIDTH_PX, widthLimitedByHeight)

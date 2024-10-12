@@ -25,10 +25,11 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         "app.meminate.maxWidthPx": IMAGE_MAX_WIDTH_PX,
     });
 
-    reportPredictedWidth(inputImagePath);
+    // Step 2: see if we can predict the width of the image
+    // reportPredictedWidth(inputImagePath);
 
-  //  const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
-   // span?.setAttribute('text.pointsize', pointsize);
+    // const pointsize = await reducePointsizeToFit(inputImagePath, phrase, DEFAULT_POINTSIZE);
+    // span?.setAttribute('text.pointsize', pointsize);
 
     const pointsize = DEFAULT_POINTSIZE;
     const args = [inputImagePath,
@@ -41,10 +42,10 @@ export async function applyTextWithImagemagick(phrase: string, inputImagePath: s
         '-annotate', '0', `${phrase}`,
         outputImagePath];
 
-    const processResult = await spawnProcess('convert', args);
+    await spawnProcess('convert', args);
 
     // Step 1: Notice how often it happens that the text does not fit
-    checkWhetherTextFits(pointsize, DEFAULT_FONT, phrase, outputImagePath);
+   // checkWhetherTextFits(pointsize, DEFAULT_FONT, phrase, outputImagePath);
 
     return outputImagePath
 }

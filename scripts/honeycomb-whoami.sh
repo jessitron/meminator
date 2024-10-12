@@ -34,5 +34,5 @@ if [ -z "$team_slug" ] || [ -z "$env_slug" ]; then
 fi
 
 # Construct and output the environment URL
-env_url="https://ui.honeycomb.io/${team_slug}/environments/${env_slug}/datasets/backend-for-frontend-$PROGRAMMING_LANGUAGE/home"
+env_url="https://ui.honeycomb.io/${team_slug}/environments/${env_slug}/datasets/backend-for-frontend-nodejs/home"
 echo "Look for traces in: $env_url"

@@ -9,7 +9,7 @@ in each service:
 cat package.json | jq '.dependencies | keys[]' -r | grep opentelemetry | sed 's/$/@latest/' |  xargs npm i
 ``
 
-## Publishing
+## Publishing   
 
 To get new versions of the containers on Dockerhub for caching, log in appropriately.
 

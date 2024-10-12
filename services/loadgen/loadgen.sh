@@ -32,8 +32,8 @@ EOF)
 
 while true; do
     # Call the endpoint and print the HTTP status code
-    
-    curl -s -X POST -w "%{http_code}\n" $LOAD_URL 2>&1 > /dev/null
+
+    curl -s -X POST -w "%{http_code}\n" $LOAD_URL 2>&1 > /dev/null &
     
     # Sleep for a random time between 1 and 2 seconds
     sleep_time=$(awk -v min=$MIN_SLEEP -v max=$MAX_SLEEP 'BEGIN{srand(); print min+rand()*(max-min)}')

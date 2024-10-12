@@ -20,20 +20,24 @@ function tell_hny_about_sleep {
   "service.name": "meminator-loadgen"
 }
 EOF)
-    curl -X POST \
+    curl -s -X POST \
   'https://api.honeycomb.io/1/events/meminator-loadgen' \
   -H 'Content-Type: application/json' \
   -H "X-Honeycomb-Team: $HONEYCOMB_API_KEY" \
   -d "$json_data"
+  if [[ $? -ne 0 ]]; then
+    echo "Failed to send event to Honeycomb"
+  fi
 }
 
 while true; do
     # Call the endpoint and print the HTTP status code
-    curl -o /dev/null -X POST -w "%{http_code}\n" $LOAD_URL  &
-
+    
+    curl -s -X POST -w "%{http_code}\n" $LOAD_URL 2>&1 > /dev/null
+    
     # Sleep for a random time between 1 and 2 seconds
     sleep_time=$(awk -v min=$MIN_SLEEP -v max=$MAX_SLEEP 'BEGIN{srand(); print min+rand()*(max-min)}')
-    echo "Sleeping for $sleep_time"
+   #  echo "Sleeping for $sleep_time"
     tell_hny_about_sleep $sleep_time
     sleep $sleep_time
 done

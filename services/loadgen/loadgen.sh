@@ -19,7 +19,8 @@ function tell_hny_about_sleep {
   "duration_ms": $duration,
   "service.name": "meminator-loadgen"
 }
-EOF)
+EOF
+)
     curl -s -X POST \
   'https://api.honeycomb.io/1/events/meminator-loadgen' \
   -H 'Content-Type: application/json' \

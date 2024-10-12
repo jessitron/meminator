@@ -1,8 +1,6 @@
 #!/bin/bash
 
 API_KEY=${HONEYCOMB_API_KEY_PROD_MARKERS:-$HONEYCOMB_API_KEY}
-echo $API_KEY
-exit 1
 
 ref=$(git rev-parse HEAD | cut -c1-10)
 if [[ -z "$VERSION_NUMBER" ]]; then

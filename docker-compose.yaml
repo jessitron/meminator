@@ -87,16 +87,16 @@ services:
     environment:
       - HONEYCOMB_API_KEY
 
-  loadgen:
-    build:
-      context: services/loadgen
-      dockerfile: Dockerfile
-      platforms:
-        - linux/amd64
-        - linux/arm64
-    image: ${IMAGE_REPO_USER}/loadgen:${IMAGE_TAG}
-    environment:
-      - LOAD_URL=http://web/backend/createPicture
-      - MIN_SLEEP=1
-      - MAX_SLEEP=5
-      - HONEYCOMB_API_KEY
+  # loadgen:
+  #   build:
+  #     context: services/loadgen
+  #     dockerfile: Dockerfile
+  #     platforms:
+  #       - linux/amd64
+  #       - linux/arm64
+  #   image: ${IMAGE_REPO_USER}/loadgen:${IMAGE_TAG}
+  #   environment:
+  #     - LOAD_URL=http://web/backend/createPicture
+  #     - MIN_SLEEP=1
+  #     - MAX_SLEEP=5
+  #     - HONEYCOMB_API_KEY

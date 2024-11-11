@@ -33,6 +33,15 @@ if [ -z "$team_slug" ] || [ -z "$env_slug" ]; then
   exit 1
 fi
 
+# To find the dataset, we want the OTEL_SERVICE_NAME of the backend-for-frontend service.
+if ! command -v yq &> /dev/null; then
+  echo "if `yq` were installed, I'd link you to the right dataset. Making a guess"
+  dataset=backend-for-frontend-nodejs
+else
+  # expecting NAME=VAL format for environment variable
+  dataset=$(yq '.services.backend-for-frontend.environment.[] | capture("OTEL_SERVICE_NAME=(?P<val>.*)").val' docker-compose.yaml)  
+fi
+
 # Construct and output the environment URL
-env_url="https://ui.honeycomb.io/${team_slug}/environments/${env_slug}/datasets/backend-for-frontend-nodejs/home"
+env_url="https://ui.honeycomb.io/${team_slug}/environments/${env_slug}/datasets/${dataset}/home"
 echo "Look for traces in: $env_url"

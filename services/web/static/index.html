@@ -11,11 +11,16 @@
 
     <script src="https://unpkg.com/@jessitronica/hny-otel-web@0.9.0/dist/hny.js"></script>
     <script>
-        window.Hny.initializeTracing({
-            debug: true,
-            apiKey: "hcaik_01j9set397q4d5s33esg4wf1fpmbhd3rmz89mbek7xscqd3dq87x2yhcpq",
-            serviceName: "meminator-web",
-        });
+        if (window.location.href.indexOf("localhost") === -1) {
+            window.Hny.initializeTracing({
+                debug: true,
+                apiKey: "hcaik_01j9set397q4d5s33esg4wf1fpmbhd3rmz89mbek7xscqd3dq87x2yhcpq",
+                serviceName: "meminator-web",
+            });
+        }
+        else {
+            console.log("Running locally, not initializing OpenTelemetry");
+        }
     </script>
     <style>
         body {

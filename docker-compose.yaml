@@ -1,7 +1,7 @@
 services:
   backend-for-frontend:
     build:
-      context: services/backend-for-frontend-nodejs
+      context: services/backend-for-frontend-java
       dockerfile: Dockerfile
     ports:
       - "10115:10114" # Expose the port your Express app is listening on
@@ -9,7 +9,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
       - OTEL_EXPORTER_OTLP_PROTOCOL=http
       - OTEL_EXPORTER_OTLP_LOG_PROTOCOL=http
-      - OTEL_SERVICE_NAME=backend-for-frontend-nodejs
+      - OTEL_SERVICE_NAME=backend-for-frontend-java
 
   meminator:
     build:

@@ -1,10 +1,7 @@
 package io.honeydemo.meminator.phrasepicker.controller;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +31,15 @@ public class PhraseController {
             "not a bug, it's a feature",
             "test in prod",
             "who broke the build?",
-            "it could be worse");
+            "it could be worse",
+            "Heap Allocation Like", // JAVA
+            "Hold on, pausing for GC", // JAVA
+            "AbstractSingletonProxyFactoryBean", // JAVA
+            "Generics were a mistake", // JAVA
+            "give my kids a completablefuture",
+            "IllegalStateException", // JAVA
+            "when you need a BufferedBufferBufferer" // JAVA
+            );
 
     @GetMapping("/phrase")
     public PhraseResult hello() {

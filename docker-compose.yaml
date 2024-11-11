@@ -25,13 +25,14 @@ services:
 
   phrase-picker:
     build:
-      context: services/phrase-picker-nodejs
+      context: services/phrase-picker-java
       dockerfile: Dockerfile
     ports:
       - "10117:10114" # the outer ports can't be the same
     environment:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4318
-      - OTEL_SERVICE_NAME=phrase-picker-nodejs
+      - OTEL_SERVICE_NAME=phrase-picker-java
+      - OTEL_EXPORTER_OTLP_LOG_PROTOCOL=http
 
   image-picker:
     build:

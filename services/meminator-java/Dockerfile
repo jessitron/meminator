@@ -4,7 +4,7 @@ ARG OTEL_JAVA_AGENT_VERSION
 WORKDIR /app
 COPY pom.xml .
 RUN mvn -B dependency:resolve dependency:resolve-plugins
-RUN wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v$OTEL_JAVA_AGENT_VERSION/opentelemetry-javaagent.jar
+RUN wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/v2.9.0/opentelemetry-javaagent.jar
 
 # Stage 2: Build application
 FROM dependencies AS build

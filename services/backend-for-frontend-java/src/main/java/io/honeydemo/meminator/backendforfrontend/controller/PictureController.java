@@ -10,9 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -25,9 +23,9 @@ public class PictureController {
 
     @Autowired
     public PictureController(WebClient.Builder webClientBuilder) {
-        this.imageClient = webClientBuilder.baseUrl("http://image-picker:10116").build();
-        this.memeClient = webClientBuilder.baseUrl("http://meminator:10117").build();
-        this.phraseClient = webClientBuilder.baseUrl("http://phrase-picker:10118").build();
+        this.imageClient = webClientBuilder.baseUrl("http://image-picker:10114").build();
+        this.memeClient = webClientBuilder.baseUrl("http://meminator:10114").build();
+        this.phraseClient = webClientBuilder.baseUrl("http://phrase-picker:10114").build();
     }
 
     @PostMapping("/createPicture")

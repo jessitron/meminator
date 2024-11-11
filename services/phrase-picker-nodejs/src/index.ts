@@ -6,11 +6,6 @@ import { logger } from "./logger"
 logger.info("A thing!")
 
 const PHRASES = [
-    "H-O-T-T-O-G-O", // Springfield
-    "I'm a doctor and a lawyer", // Springfield
-    "I'm a doctor and a lawyer", // Springfield - doubling up for frequency
-    "We have an airport!", // Springfield
-    "not trout", // Springfield
     "you're muted",
     "not dead yet",
     "Let them.",

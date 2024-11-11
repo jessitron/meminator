@@ -10,6 +10,7 @@ set -e
 
 docker compose up --build -d $*
 
+echo "Creating marker in Honeycomb"
 HONEYCOMB_API_KEY=$HONEYCOMB_API_KEY_LOCAL_MARKERS ./scripts/create-marker.sh $*
 
 ./scripts/honeycomb-whoami.sh

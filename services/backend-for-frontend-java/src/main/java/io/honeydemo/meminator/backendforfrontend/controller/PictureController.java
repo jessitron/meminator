@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import io.opentelemetry.api.trace.Span;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -30,6 +31,7 @@ public class PictureController {
 
     @PostMapping("/createPicture")
     public Mono<Object> createPicture() throws MalformedURLException {
+        Span span = Span.current();
 
         var phraseResult = phraseClient.get().uri("/phrase").retrieve().toEntity(PhraseResult.class);
         var imageResult = imageClient.get().uri("/imageUrl").retrieve().toEntity(ImageResult.class);
@@ -44,6 +46,8 @@ public class PictureController {
             String phrase = v.getT1().getBody().getPhrase();
             String imageUrl = v.getT2().getBody().getImageUrl();
             logger.info("app.phrase=" + phrase + ", app.imageUrl=" + imageUrl);
+            span.setAttribute("app.phrase", phrase);
+            span.setAttribute("app.imageUrl", imageUrl);
 
             return memeClient.post().uri("/applyPhraseToPicture").bodyValue(new MemeRequest(phrase, imageUrl))
                     .retrieve().toEntity(byte[].class);

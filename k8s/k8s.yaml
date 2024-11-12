@@ -29,7 +29,7 @@ spec:
     spec:
       containers:
         - name: backend-for-frontend
-          image: o11yday/backend-for-frontend-nodejs:IMAGE_TAG
+          image: o11yday/backend-for-frontend-java:IMAGE_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -71,7 +71,7 @@ spec:
     spec:
       containers:
         - name: meminator
-          image: o11yday/meminator-nodejs:IMAGE_TAG
+          image: o11yday/meminator-java:IMAGE_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -117,7 +117,7 @@ spec:
     spec:
       containers:
         - name: phrase-picker
-          image: o11yday/phrase-picker-nodejs:IMAGE_TAG
+          image: o11yday/phrase-picker-java:IMAGE_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 10114
@@ -213,7 +213,7 @@ metadata:
   name: loadgen
   namespace: o11yday
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: loadgen

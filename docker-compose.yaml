@@ -3,6 +3,11 @@ services:
     build:
       context: services/backend-for-frontend-java
       dockerfile: Dockerfile
+      platforms:
+        # this is useful for pushing to Dockerhub, not for local builds
+        - linux/amd64
+        - linux/arm64
+    image: ${IMAGE_REPO_USER}/backend-for-frontend-nodejs:${IMAGE_TAG}
     ports:
       - "10115:10114" # Expose the port your Express app is listening on
     environment:
@@ -15,6 +20,10 @@ services:
     build:
       context: services/meminator-java
       dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    image: ${IMAGE_REPO_USER}/meminator-nodejs:${IMAGE_TAG}
     ports:
       - "10116:10114" # they can't be the same
     environment:
@@ -27,6 +36,10 @@ services:
     build:
       context: services/phrase-picker-java
       dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    image: ${IMAGE_REPO_USER}/phrase-picker-nodejs:${IMAGE_TAG}
     ports:
       - "10117:10114" # the outer ports can't be the same
     environment:
@@ -38,6 +51,10 @@ services:
     build:
       context: services/image-picker-nodejs
       dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    image: ${IMAGE_REPO_USER}/image-picker-nodejs:${IMAGE_TAG}
     ports:
       - "10118:10114" # the outer ports can't be the same
     environment:
@@ -51,6 +68,10 @@ services:
       dockerfile: Dockerfile
       args:
         HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
+      platforms:
+        - linux/amd64
+        - linux/arm64
+    image: ${IMAGE_REPO_USER}/web:${IMAGE_TAG}
     # volumes: # uncomment this for faster development on the frontend
     #   - ./services/web/dist:/usr/share/nginx/html # Mount directory containing static files -- only do this for development
     ports:

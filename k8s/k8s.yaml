@@ -37,7 +37,7 @@ spec:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
-              value: "backend-for-frontend-nodejs"
+              value: "backend-for-frontend-java"
 
 ---
 apiVersion: v1
@@ -125,7 +125,7 @@ spec:
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               value: "http://daemonset-otelcol.default.svc.cluster.local:4318"
             - name: OTEL_SERVICE_NAME
-              value: "phrase-picker-nodejs"
+              value: "phrase-picker-java"
 
 ---
 apiVersion: v1

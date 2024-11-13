@@ -3,12 +3,15 @@ package io.honeydemo.meminator.phrasepicker.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import io.opentelemetry.api.trace.Span; // INSTRUMENTATION
 
 @RestController
 public class PhraseController {
+
+     private static final Logger logger = LogManager.getLogger("io.honeydemo.meminator.phrasepicker");
 
     private static List<String> PhraseList = Arrays.asList(
             "you're muted",
@@ -37,21 +40,23 @@ public class PhraseController {
             "AbstractSingletonProxyFactoryBean", // JAVA
             "Generics were a mistake", // JAVA
             "give my kids a completablefuture",
-            "IllegalStateException", // JAVA
-            "when you need a BufferedBufferBufferer" // JAVA
+            "I'm a little teapot"
             );
 
     @GetMapping("/phrase")
     public PhraseResult hello() {
         // choose a random phrase from the list
-        Span span = Span.current();
-        span.setAttribute("app.listSize", PhraseList.size());
         int choice = (int) (Math.random() * PhraseList.size());
-        span.setAttribute("app.choice", choice);
-
+        
+        logger.info("app.listSize=" + PhraseList.size() + ", app.choice=" + choice);
+        
         String chosenPhrase = PhraseList.get(choice);
-        // INSTRUMENTATION: add a useful attribute
-        span.setAttribute("app.phrase", chosenPhrase);
+        
+        logger.info("app.phrase=" + chosenPhrase);
+        // Span span = Span.current();
+        // span.setAttribute("app.listSize", PhraseList.size());
+        // span.setAttribute("app.choice", choice);
+        // span.setAttribute("app.phrase", chosenPhrase);
         return new PhraseResult(chosenPhrase);
     }
 

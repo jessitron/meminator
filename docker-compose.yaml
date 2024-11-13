@@ -88,6 +88,20 @@ services:
     environment:
       - HONEYCOMB_API_KEY
 
+  aspire-dashboard:
+    #DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS
+    # docker run --rm -it \
+    # -p 18888:18888 -p 4317:18889 \
+    # -d --name aspire-dashboard \
+    # -e DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS="true" \
+    # mcr.microsoft.com/dotnet/aspire-dashboard:8.1.0
+    image: mcr.microsoft.com/dotnet/aspire-dashboard:8.1.0
+    ports:
+      - "18888:18888"
+      - "18889:18889" # receive OTLP here
+    environment:
+      - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
+
   # loadgen:
   #   build:
   #     context: services/loadgen

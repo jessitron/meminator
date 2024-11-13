@@ -29,7 +29,10 @@ exporters:
     headers:
       x-honeycomb-team: ${HONEYCOMB_API_KEY}
       x-honeycomb-dataset: "not-traces"
-
+  otlp/local:
+    endpoint: "http://aspire-dashboard:18889"
+    tls:
+      insecure: true
 service:
   telemetry:
     logs:
@@ -38,12 +41,12 @@ service:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, attributes/attribution, batch]
-      exporters: [otlp]
+      exporters: [otlp, otlp/local]
     metrics:
       receivers: [otlp]
       processors: [memory_limiter, attributes/attribution, batch]
-      exporters: [otlp]
+      exporters: [otlp, otlp/local]
     logs:
       receivers: [otlp]
       processors: [memory_limiter, attributes/attribution, batch]
-      exporters: [otlp]
+      exporters: [otlp, otlp/local]

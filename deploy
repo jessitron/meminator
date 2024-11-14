@@ -9,13 +9,13 @@ me=$0
 deploy_only=$1
 
 source .env
-VERSION_NUMBER=60
+VERSION_NUMBER=65
 export IMAGE_TAG=byo-sre-$VERSION_NUMBER
 
 # because separately pushing ignores the other platform GOD I HATE HASHICORP SOMETIMES
 docker compose build --push $deploy_only
 
-# Now do the kubernetes deloy
+# Now do the kubernetes deploy
 if [[ -n "$deploy_only" ]]; then
 # do only the sections of yaml for this app
   cat k8s/k8s.yaml \

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.opentelemetry.instrumentation.annotations.WithSpan;
+import io.opentelemetry.api.trace.Span;
 
 @RestController
 public class MeminatorController {
@@ -40,6 +40,9 @@ public class MeminatorController {
         try {
             String phrase = request.getPhrase();
             URL imageUrl = new URL(request.getImageUrl());
+            Span span = Span.current();
+            span.setAttribute("app.phrase", phrase);
+            span.setAttribute("app.imageUrl", imageUrl.toString());
             
             String filename = new File(imageUrl.getPath()).getName();
             String fileExtension = getFileExtension(filename);
@@ -127,10 +130,10 @@ public class MeminatorController {
         }
     }
 
-    @WithSpan
+    // @WithSpan
     private int runConvertCommand(File inputFile, String phrase, String outputFilePath) throws InterruptedException, IOException {
 
-          //  Span subprocessSpan = GlobalOpenTelemetry.getTracer("pictureController").spanBuilder("convert").startSpan();
+        Span span = Span.current();
         ProcessBuilder pb = new ProcessBuilder(new String[] {
             "convert", 
             inputFile.getAbsolutePath(), 
@@ -145,14 +148,14 @@ public class MeminatorController {
             phrase.toUpperCase(),
             outputFilePath
         });
-      //  subprocessSpan.setAttribute("app.subprocess.command", String.join(" ", pb.command()));
+        span.setAttribute("app.subprocess.command", String.join(" ", pb.command()));
         pb.inheritIO();
         Process process = pb.start();
 
         InputStream stream = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         StringBuilder output = new StringBuilder();
-        String line = null;
+        String line;
         while((line = reader.readLine()) != null) {
             output.append(line).append("\n");
         }
@@ -160,16 +163,16 @@ public class MeminatorController {
         InputStream errStream = process.getErrorStream();
         BufferedReader errReader = new BufferedReader(new InputStreamReader(errStream));
         StringBuilder error = new StringBuilder();
-        String errLine = "";
+        String errLine;
         while((errLine = errReader.readLine()) != null) {
             error.append(errLine).append("\n");
         }
 
         int exitCode = process.waitFor();
-                    // subprocessSpan.setAttribute("app.subprocess.returncode", exitCode);
-            // subprocessSpan.setAttribute("app.subprocess.stdout", output.toString());
-            // subprocessSpan.setAttribute("app.subprocess.stderr", error.toString());
-            // subprocessSpan.end();
+        span.setAttribute("app.subprocess.returncode", exitCode);
+        span.setAttribute("app.subprocess.stdout", output.toString());
+        span.setAttribute("app.subprocess.stderr", error.toString());
+        span.end();
         return exitCode;
     }
 }

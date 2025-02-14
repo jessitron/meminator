@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @RestController
 public class MeminatorController {
@@ -130,7 +131,7 @@ public class MeminatorController {
         }
     }
 
-    // @WithSpan
+    @WithSpan
     private int runConvertCommand(File inputFile, String phrase, String outputFilePath) throws InterruptedException, IOException {
 
         Span span = Span.current();
@@ -172,7 +173,7 @@ public class MeminatorController {
         span.setAttribute("app.subprocess.returncode", exitCode);
         span.setAttribute("app.subprocess.stdout", output.toString());
         span.setAttribute("app.subprocess.stderr", error.toString());
-        span.end();
+       // span.end();
         return exitCode;
     }
 }

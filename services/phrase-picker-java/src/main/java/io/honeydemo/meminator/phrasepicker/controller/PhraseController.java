@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.opentelemetry.api.trace.Span;
+
 @RestController
 public class PhraseController {
 
@@ -35,12 +37,12 @@ public class PhraseController {
             "test in prod",
             "who broke the build?",
             "it could be worse",
-            "Heap Allocation Like", // JAVA
             "Hold on, pausing for GC", // JAVA
             "AbstractSingletonProxyFactoryBean", // JAVA
             "Generics were a mistake", // JAVA
             "give my kids a completablefuture",
-            "I'm a little teapot"
+            "I'm a software engineer, I have feelings",
+            "Hello Wrold"
             );
 
     @GetMapping("/phrase")
@@ -53,10 +55,10 @@ public class PhraseController {
         String chosenPhrase = PhraseList.get(choice);
         
         logger.info("app.phrase=" + chosenPhrase);
-        // Span span = Span.current();
-        // span.setAttribute("app.listSize", PhraseList.size());
-        // span.setAttribute("app.choice", choice);
-        // span.setAttribute("app.phrase", chosenPhrase);
+        Span span = Span.current();
+        span.setAttribute("app.listSize", PhraseList.size());
+        span.setAttribute("app.choice", choice);
+        span.setAttribute("app.phrase", chosenPhrase);
         return new PhraseResult(chosenPhrase);
     }
 
